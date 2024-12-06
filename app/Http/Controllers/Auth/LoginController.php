@@ -28,13 +28,8 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if ($user->hasRole('admin')) {
-            return redirect()->route('dashboard.admin');
-        } elseif ($user->hasRole('manager')) {
-            return redirect()->route('dashboard.manager');
-        } elseif ($user->hasRole('caviste')) {
-            return redirect()->route('dashboard.caviste');
-        }
+        // Redirection unique vers le dashboard
+        return redirect()->route('dashboard');
     }
 
 

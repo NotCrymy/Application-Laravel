@@ -23,6 +23,6 @@ class RolePermissionSeeder extends Seeder
         // Assignation des permissions aux rôles
         $admin->givePermissionTo(['manage users', 'view cuves', 'edit cuves']);
         $manager->givePermissionTo(['view cuves']);
-        $caviste->givePermissionTo(['edit cuves']);
+        $caviste->givePermissionTo(['view cuves','edit cuves']);
     }
 }
