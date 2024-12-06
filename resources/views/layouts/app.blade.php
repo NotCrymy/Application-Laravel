@@ -3,33 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Mon Application')</title>
-    <!-- Ajoutez ici vos fichiers CSS -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <title>@yield('title', 'Application de Gestion')</title>
+    <!-- Ajout du CDN Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        @auth
-            <nav>
-                <a href="{{ route('dashboard') }}">Dashboard</a>
-                @can('admin-access')
-                    <a href="{{ route('users.index') }}">Utilisateurs</a>
-                    <a href="{{ route('logs.index') }}">Logs</a>
-                @endcan
-                @can('caviste-access')
-                    <a href="{{ route('cuves.index') }}">Cuves</a>
-                @endcan
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit">Déconnexion</button>
-                </form>
-            </nav>
-        @endauth
-    </header>
-    <main>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ route('dashboard') }}">Gestion App</a>
+        </div>
+    </nav>
+    <main class="container py-4">
         @yield('content')
     </main>
-    <!-- Ajoutez ici vos fichiers JS -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <!-- Ajout du CDN Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
