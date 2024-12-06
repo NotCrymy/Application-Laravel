@@ -21,10 +21,20 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // Routes protégées par l'authentification
 Route::middleware('auth')->group(function () {
 
-    // Dashboard accessible à tous les utilisateurs connectés
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Dashboard pour les administrateurs
+    Route::get('/dashboard/admin', function () {
+        return view(view: 'dashboard.admin');
+    })->middleware('can:admin-access')->name('dashboard.admin');
+
+    // Dashboard pour les managers
+    Route::get('/dashboard/manager', function () {
+        return view(view: 'dashboard.manager');
+    })->middleware('can:manager-access')->name('dashboard.manager');
+
+    // Dashboard pour les cavistes
+    Route::get('/dashboard/caviste', function () {
+        return view(view: 'dashboard.caviste');
+    })->middleware('can:caviste-access')->name('dashboard.caviste');
 
     // Routes pour les administrateurs uniquement
     Route::middleware('can:admin-access')->group(function () {

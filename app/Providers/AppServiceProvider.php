@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('admin');
         });
 
+        // Gate pour les managers
+        Gate::define('manager-access', function ($user) {
+            return $user->hasRole('manager');
+        });
+
         // Gate pour les cavistes
         Gate::define('caviste-access', function ($user) {
             return $user->hasRole('caviste');

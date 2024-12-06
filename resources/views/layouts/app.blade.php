@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">Gestion App</a>
+            <a class="navbar-brand" >Gestion App</a>
         </div>
     </nav>
     <main class="container py-4">

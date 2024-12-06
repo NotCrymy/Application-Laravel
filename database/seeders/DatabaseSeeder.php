@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Cuve;
+use App\Models\Mout;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -13,14 +15,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Crée le rôle "admin"
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        // Appel du RolePermissionSeeder pour créer les rôles et permissions
+        $this->call(RolePermissionSeeder::class);
 
-        // Crée un utilisateur admin
-        $admin = User::factory()->admin()->create();
+        // Crée le premier utilisateur admin
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->admin()->create(); // Utilise le state admin de la factory
         $admin->assignRole($adminRole);
 
-        // Crée d'autres utilisateurs random
+        // Crée 10 utilisateurs aléatoires
         User::factory(10)->create();
+
+        // Crée 10 cuves
+        Cuve::factory(10)->create();
+
+        // Crée 50 moûts, assignés aléatoirement aux cuves
+        Mout::factory(50)->create();
     }
 }
