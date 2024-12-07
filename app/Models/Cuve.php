@@ -15,4 +15,16 @@ class Cuve extends Model
     {
         return $this->hasMany(Mout::class);
     }
+
+    // Calculer le volume total des moûts dans la cuve
+    public function volumeTotal()
+    {
+        return $this->mouts->sum('volume');
+    }
+
+    // Vérifie si un volume supplémentaire peut être ajouté
+    public function peutAccepterVolume($volume)
+    {
+        return ($this->volumeTotal() + $volume) <= $this->volume_max;
+    }
 }

@@ -37,11 +37,34 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        // Met à jour les informations de l'utilisateur
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'] ? bcrypt($validated['password']) : $user->password,
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+    }
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'Utilisateur supprimé.');
+    }
+
+    public function edit(User $user)
+    {
+        return view('users.edit', compact('user'));
     }
 }

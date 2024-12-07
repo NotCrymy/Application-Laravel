@@ -25,14 +25,23 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Routes accessibles par tous les rôles authentifiés
+    // Routes pour les cuves
     Route::get('/cuves', [CuveController::class, 'index'])->name('cuves.index');
-    Route::post('/cuves/{cuve}/mouts', [MoutController::class, 'store'])->name('cuves.mouts.store');
+    Route::get('/cuves/{cuve}', [CuveController::class, 'show'])->name('cuves.show'); // Voir les détails d'une cuve
+    Route::get('/cuves/{cuve}/edit', [CuveController::class, 'edit'])->name('cuves.edit'); // Modifier une cuve
+    Route::put('/cuves/{cuve}', [CuveController::class, 'update'])->name('cuves.update'); // Mettre à jour une cuve
+    Route::post('/cuves/{cuve}/mouts', [MoutController::class, 'store'])->name('cuves.mouts.store'); // Ajouter un moût
+    Route::delete('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'destroy'])->name('mouts.destroy'); // Supprimer un moût
 
-    // Routes spécifiques aux administrateurs
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    // Routes pour les utilisateurs (admin uniquement)
+    Route::middleware('can:admin-access')->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users.index'); // Voir les utilisateurs
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit'); // Éditer un utilisateur
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
+        Route::post('/users', [UserController::class, 'store'])->name('users.store'); // Créer un utilisateur
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
+    });
 
-    Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+    // Routes pour les logs (admin uniquement)
+    Route::middleware('can:admin-access')->get('/logs', [LogController::class, 'index'])->name('logs.index');
 });

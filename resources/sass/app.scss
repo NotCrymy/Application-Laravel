@@ -6,3 +6,19 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// Styles personnalisés
+body {
+    background-color: #ffffff;
+}
+
+.card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s ease-in-out;
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

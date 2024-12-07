@@ -11,18 +11,25 @@ class RolePermissionSeeder extends Seeder
     public function run()
     {
         // Création des rôles
-        $admin = Role::create(['name' => 'admin']);
-        $manager = Role::create(['name' => 'manager']);
-        $caviste = Role::create(['name' => 'caviste']);
+        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $manager = Role::firstOrCreate(['name' => 'manager']);
+        $caviste = Role::firstOrCreate(['name' => 'caviste']);
 
         // Création des permissions
-        Permission::create(['name' => 'manage users']);
-        Permission::create(['name' => 'view cuves']);
-        Permission::create(['name' => 'edit cuves']);
+        $permissions = [
+            'manage users',
+            'view cuves',
+            'edit cuves',
+            'view logs',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
 
         // Assignation des permissions aux rôles
-        $admin->givePermissionTo(['manage users', 'view cuves', 'edit cuves']);
+        $admin->givePermissionTo(['manage users', 'view cuves', 'edit cuves', 'view logs']);
         $manager->givePermissionTo(['view cuves']);
-        $caviste->givePermissionTo(['view cuves','edit cuves']);
+        $caviste->givePermissionTo(['edit cuves']);
     }
 }
