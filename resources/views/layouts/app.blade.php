@@ -41,7 +41,6 @@
     <main class="container py-4">
         @yield('content')
     </main>
-    
     <!-- Ajout du JS compilé -->
     @vite('resources/js/app.js')
 </body>
