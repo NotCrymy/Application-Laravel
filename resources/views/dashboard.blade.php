@@ -42,15 +42,13 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-md-6 mb-3">
-                            <a href="{{ route('cuves.index') }}" class="btn btn-warning w-100 py-3">
-                                <i class="fas fa-wine-bottle fa-2x mb-2"></i>
-                                <br>Voir les Cuves
+                        <a href="{{ route('cuves.index') }}" class="btn btn-warning w-100 py-3 centered-button">
+                                Voir les Cuves
                             </a>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <a href="#" class="btn btn-light w-100 py-3 disabled">
-                                <i class="fas fa-chart-line fa-2x mb-2"></i>
-                                <br>Autres Fonctionnalités (à venir)
+                            <a href="#" class="btn btn-light disabled w-100 py-3 centered-button">
+                                Autres Fonctionnalités (à venir)
                             </a>
                         </div>
                     </div>
@@ -68,14 +66,12 @@
                     <div class="row text-center">
                         <div class="col-md-6 mb-3">
                             <a href="{{ route('cuves.index') }}" class="btn btn-success w-100 py-3">
-                                <i class="fas fa-glass-cheers fa-2x mb-2"></i>
-                                <br>Voir les Cuves
+                                Voir les Cuves
                             </a>
                         </div>
                         <div class="col-md-6 mb-3">
                             <a href="#" class="btn btn-light w-100 py-3 disabled">
-                                <i class="fas fa-edit fa-2x mb-2"></i>
-                                <br>Modifier les Moûts (à venir)
+                                Modifier les Moûts (à venir)
                             </a>
                         </div>
                     </div>

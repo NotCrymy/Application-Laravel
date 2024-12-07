@@ -25,6 +25,17 @@
             <input type="password" class="form-control" id="password" name="password">
         </div>
 
+        <div class="mb-3">
+            <label for="role" class="form-label">Rôle</label>
+            <select name="role" id="role" class="form-select">
+                @foreach($roles as $role)
+                    <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                        {{ ucfirst($role->name) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-success">Sauvegarder</button>
         <a href="{{ route('users.index') }}" class="btn btn-secondary">Annuler</a>
     </form>

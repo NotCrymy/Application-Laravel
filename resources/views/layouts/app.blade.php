@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Application de Gestion')</title>
+    <title>@yield('title', 'BreakingWine')</title>
     
     <!-- Ajout du CSS compilé avec SCSS -->
     @vite('resources/sass/app.scss')
@@ -11,8 +11,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{{ route('dashboard') }}">
-                Gestion App
+            <a class="navbar-brand fw-bold text-warning" href="{{ route('dashboard') }}">
+                BreakingWine
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
