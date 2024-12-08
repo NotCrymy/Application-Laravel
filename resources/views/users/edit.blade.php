@@ -29,7 +29,10 @@
             <label for="role" class="form-label">Rôle</label>
             <select name="role" id="role" class="form-select">
                 @foreach($roles as $role)
-                    <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                    @if(($role->name === 'admin' || $role->name === 'super-admin') && !auth()->user()->can('manage-admins'))
+                        @continue
+                    @endif
+                    <option value="{{ $role->name }}">
                         {{ ucfirst($role->name) }}
                     </option>
                 @endforeach

@@ -14,7 +14,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all(); // Liste tous les utilisateurs
-        return view('users.index', compact('users'));
+        $roles = Role::all(); // Récupère tous les rôles
+        return view('users.index', compact('users', 'roles'));
     }
 
     /**
@@ -22,26 +23,30 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate(
-            [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8',
-            ],
-            [
-                'name.required' => 'Le champ "Nom" est obligatoire.',
-                'email.required' => 'Le champ "Email" est obligatoire.',
-                'email.email' => 'Veuillez fournir une adresse email valide.',
-                'email.unique' => 'Cet email est déjà utilisé.',
-                'password.required' => 'Le champ "Mot de passe" est obligatoire.',
-                'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
-            ]
-        );
+        // Validation des données
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|max:30',
+            'role' => 'required|exists:roles,name',
+        ]);
 
-        $validated['password'] = bcrypt($validated['password']); // Hash du mot de passe
-        User::create($validated);
+        // Vérifie si l'utilisateur essaie d'ajouter un administrateur
+        if ($validated['role'] === 'admin' && !auth()->user()->can('manage-admins')) {
+            return redirect()->route('users.index')->with('error', 'Vous n\'êtes pas autorisé à ajouter un administrateur.');
+        }
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
+        // Création de l'utilisateur
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        // Attribution du rôle
+        $user->assignRole($validated['role']);
+
+        return redirect()->route('users.index')->with('success', 'Utilisateur ajouté avec succès.');
     }
 
     /**
@@ -85,8 +90,38 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+
+        // Vérifie si l'utilisateur est un administrateur
+        if ($user->hasRole('admin') && !auth()->user()->can('manage-admins')) {
+            return redirect()->route('users.index')->with('error', 'Vous n\'êtes pas autorisé à supprimer un administrateur.');
+        }
+
+        // Vérifie si l'utilisateur essaie de se supprimer lui-même
+        if (auth()->id() === $user->id) {
+            return redirect()->route('users.index')->with('error', 'Vous ne pouvez pas vous supprimer vous-même.');
+        }
+
+        // Supprime l'utilisateur
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé.');
+        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
+    }
+
+    public function updateRole(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Vérifie si l'utilisateur est un super admin
+        if ($user->hasRole('super-admin')) {
+            return redirect()->route('users.index')->with('error', 'Le rôle du super administrateur ne peut pas être modifié.');
+        }
+
+        $request->validate([
+            'role' => 'required|exists:roles,name',
+        ]);
+
+        $user->syncRoles([$request->input('role')]);
+
+        return redirect()->route('users.index')->with('success', 'Le rôle de l\'utilisateur a été mis à jour avec succès.');
     }
 }

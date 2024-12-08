@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Modifier la Cuve : {{ $cuve->nom }}</h1>
+<h1>Modifier la Cuve : {{ $cuve->nom }}</h1>
     
     <form action="{{ route('cuves.update', $cuve) }}" method="POST">
         @csrf
@@ -20,8 +20,17 @@
             <input type="number" step="0.01" class="form-control" id="volume_max" name="volume_max" value="{{ $cuve->volume_max }}" required>
         </div>
 
-        <button type="submit" class="btn btn-success">Enregistrer les Modifications</button>
-        <a href="{{ route('cuves.index') }}" class="btn btn-secondary">Annuler</a>
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-success">Enregistrer les Modifications</button>
+            <form action="{{ route('cuves.destroy', $cuve) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette cuve ?');">
+                @csrf
+                @method('DELETE')
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-danger">Supprimer la Cuve</button>
+                </div>
+            </form>
+            <a href="{{ route('cuves.index') }}" class="btn btn-secondary">Annuler</a>
+        </div>
     </form>
 
     <h2 class="mt-5">Moûts dans la Cuve</h2>

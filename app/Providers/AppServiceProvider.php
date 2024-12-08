@@ -20,9 +20,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Grant all permissions to super admin
+        Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super-admin')) {
+                return true;
+            }
+        });
+
         // Gate pour les administrateurs
         Gate::define('admin-access', function ($user) {
             return $user->hasRole('admin');
+        });
+
+        // Gate spécifique pour gérer les administrateurs
+        Gate::define('manage-admins', function ($user) {
+            return $user->hasRole('super-admin');
         });
 
         // Gate pour les managers

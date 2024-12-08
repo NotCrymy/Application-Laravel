@@ -26,9 +26,12 @@ class CuveController extends Controller
             'volume_max' => 'required|numeric|min:0',
         ]);
 
+        $oldNom = $cuve->nom;
+        $oldVolumeMax = $cuve->volume_max;
+
         $cuve->update($validated);
 
-        \App\Helpers\LogHelper::logAction("Modification de la cuve {$cuve->nom}.");
+        \App\Helpers\LogHelper::logAction("Modification de la cuve '{$oldNom}' : Nouveau nom = '{$cuve->nom}', Ancien volume max = '{$oldVolumeMax}', Nouveau volume max = '{$cuve->volume_max}'.");
 
         return redirect()->route('cuves.index')->with('success', 'Cuve mise à jour avec succès.');
     }
@@ -42,22 +45,20 @@ class CuveController extends Controller
 
         $cuve = Cuve::create($validated);
 
-        \App\Helpers\LogHelper::logAction("Création de la cuve {$cuve->nom}.");
+        \App\Helpers\LogHelper::logAction("Création de la cuve '{$cuve->nom}' avec un volume maximum de {$cuve->volume_max} L.");
 
         return redirect()->route('cuves.index')->with('success', 'Cuve créée avec succès.');
     }
 
-    public function destroy(Cuve $cuve, Mout $mout)
+    public function destroy(Cuve $cuve)
     {
-        if ($mout->cuve_id !== $cuve->id) {
-            return redirect()->route('cuves.show', $cuve)->withErrors(['error' => 'Ce moût n\'appartient pas à cette cuve.']);
-        }
+        $nom = $cuve->nom;
 
-        $mout->delete();
+        $cuve->delete();
 
-        \App\Helpers\LogHelper::logAction("Suppression d'un moût dans la cuve {$cuve->nom} : {$mout->type} ({$mout->volume} L).");
+        \App\Helpers\LogHelper::logAction("Suppression de la cuve '{$nom}'.");
 
-        return redirect()->route('cuves.show', $cuve)->with('success', 'Moût supprimé avec succès.');
+        return redirect()->route('cuves.index')->with('success', 'Cuve supprimée avec succès.');
     }
 
 

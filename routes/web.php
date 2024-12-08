@@ -29,12 +29,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/cuves', [CuveController::class, 'index'])->name('cuves.index');
     Route::get('/cuves/{cuve}', [CuveController::class, 'show'])->name('cuves.show'); // Voir les détails d'une cuve
     Route::get('/cuves/{cuve}/edit', [CuveController::class, 'edit'])->name('cuves.edit'); // Modifier une cuve
+    Route::delete('/cuves/{cuve}', [CuveController::class, 'destroy'])->name('cuves.destroy'); // Suppr une cuve
     Route::put('/cuves/{cuve}', [CuveController::class, 'update'])->name('cuves.update'); // Mettre à jour une cuve
     Route::post('/cuves/{cuve}/mouts', [MoutController::class, 'store'])->name('cuves.mouts.store'); // Ajouter un moût
     Route::delete('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'destroy'])->name('mouts.destroy'); // Supprimer un moût
 
     // Routes pour les utilisateurs (admin uniquement)
-    Route::middleware('can:admin-access')->group(function () {
+    Route::middleware(['can:admin-access'])->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index'); // Voir les utilisateurs
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit'); // Éditer un utilisateur
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur

@@ -33,6 +33,8 @@ class MoutController extends Controller
 
         $mout->delete();
 
+        \App\Helpers\LogHelper::logAction("Suppression d'un moût dans la cuve {$cuve->nom} : {$mout->type} ({$mout->volume} L).");
+
         return redirect()->route('cuves.show', $cuve)->with('success', 'Moût supprimé avec succès.');
     }
 }

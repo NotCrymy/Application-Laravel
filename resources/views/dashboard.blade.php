@@ -7,7 +7,7 @@
     <h1 class="text-center my-4">Bienvenue sur le Dashboard</h1>
 
     <!-- Section Admin -->
-    @can('admin-access')
+    @canany(['admin-access', 'super-admin-access'])
         <div class="mb-5">
             <h2 class="text-primary text-center mb-3">Section Admin</h2>
             <div class="card shadow-sm border-primary">
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-    @endcan
+    @endcanany
 
     <!-- Section Manager -->
     @can('manager-access')
@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-md-6 mb-3">
-                        <a href="{{ route('cuves.index') }}" class="btn btn-warning w-100 py-3 centered-button">
+                            <a href="{{ route('cuves.index') }}" class="btn btn-warning w-100 py-3 centered-button">
                                 Voir les Cuves
                             </a>
                         </div>

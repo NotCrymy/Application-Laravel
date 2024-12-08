@@ -39,6 +39,19 @@
         </div>
     </nav>
     <main class="container py-4">
+        <!-- affiche les messages d'erreurs -->
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @yield('content')
     </main>
     <!-- Ajout du JS compilé -->

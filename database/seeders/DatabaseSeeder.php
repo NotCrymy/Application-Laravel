@@ -19,11 +19,18 @@ class DatabaseSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
 
         // Crée le premier utilisateur admin
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $admin = User::factory()->admin()->create(); // Utilise le state admin de la factory
-        $admin->assignRole($adminRole);
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
 
-        // Crée 10 utilisateurs aléatoires
+        // Crée le premier utilisateur en tant que super admin
+        $superAdmin = User::factory()->create([
+            'name' => 'Super Admin',
+            'email' => 'superadmin@domain.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $superAdmin->assignRole($superAdminRole);
+
+        // Ajoutez les autres utilisateurs ici
         User::factory(10)->create();
 
         // Crée 10 cuves
