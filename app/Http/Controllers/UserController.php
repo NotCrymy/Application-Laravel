@@ -15,7 +15,8 @@ class UserController extends Controller
     {
         $users = User::all(); // Liste tous les utilisateurs
         $roles = Role::all(); // Récupère tous les rôles
-        return view('users.index', compact('users', 'roles'));
+        $defaultRole = 'caviste'; // Rôle par défaut
+        return view('users.index', compact('users', 'roles', 'defaultRole'));
     }
 
     /**
@@ -56,7 +57,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id); // Trouver l'utilisateur
         $roles = Role::all(); // Récupérer tous les rôles disponibles
-        return view('users.edit', compact('user', 'roles'));
+        $defaultRole = 'caviste'; // Rôle par défaut
+        return view('users.edit', compact('user', 'roles', 'defaultRole'));
     }
 
     /**

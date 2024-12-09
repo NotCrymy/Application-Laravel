@@ -18,23 +18,25 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <!-- Bouton retour au dashboard -->
-                    <li class="nav-item me-2">
-                        <a class="btn btn-primary px-4" href="{{ route('dashboard') }}">
-                            <i class="fas fa-home me-1"></i> Retour au Dashboard
-                        </a>
-                    </li>
-                    <!-- Bouton logout -->
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button class="btn btn-danger px-4" type="submit">
-                                <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
-                            </button>
-                        </form>
-                    </li>
-                </ul>
+                @if(!Route::is('login')) <!-- Ne pas afficher ces boutons si la route est 'login' -->
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <!-- Bouton retour au dashboard -->
+                        <li class="nav-item me-2">
+                            <a class="btn btn-primary px-4" href="{{ route('dashboard') }}">
+                                <i class="fas fa-home me-1"></i> Retour au Dashboard
+                            </a>
+                        </li>
+                        <!-- Bouton logout -->
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button class="btn btn-danger px-4" type="submit">
+                                    <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                @endif
             </div>
         </div>
     </nav>

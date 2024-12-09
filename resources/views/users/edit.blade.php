@@ -32,7 +32,7 @@
                     @if(($role->name === 'admin' || $role->name === 'super-admin') && !auth()->user()->can('manage-admins'))
                         @continue
                     @endif
-                    <option value="{{ $role->name }}">
+                    <option value="{{ $role->name }}" {{ trim($role->name) === trim($defaultRole) ? 'selected' : '' }}>
                         {{ ucfirst($role->name) }}
                     </option>
                 @endforeach
