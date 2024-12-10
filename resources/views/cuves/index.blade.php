@@ -33,7 +33,17 @@
                     <td>{{ $cuve->volume_max }} L</td>
                     <td>{{ $cuve->volumeTotal() }} L</td>
                     <td>
-                        <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir la Cuve</a>
+                        <!-- Bouton Voir la Cuve -->
+                        @canany(['cuviste-access', 'manager-access'])
+                            <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir la Cuve</a>
+                        @endcanany
+
+                        <!-- Bouton Modifier le Moût -->
+                        @can('cuviste-access')
+                            @if($cuve->mouts->count() > 0)
+                                <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier les Moûts</a>
+                            @endif
+                        @endcan
                     </td>
                 </tr>
             @empty

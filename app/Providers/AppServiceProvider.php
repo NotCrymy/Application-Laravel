@@ -48,15 +48,6 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('cuviste');
         });
 
-        Gate::define('add-mout', function ($user) {
-            return $user->hasRole('cuviste') || $user->hasRole('admin');
-        });
-
-        Gate::define('edit-mout', function ($user) {
-            return $user->hasRole('cuviste') || $user->hasRole('admin');
-        });
-        
-
         View::composer('*', function ($view) {
             $breadcrumbsConfig = [
                 'dashboard' => [
