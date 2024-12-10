@@ -42,6 +42,23 @@
         </div>
     </nav>
     <main class="container py-4">
+        <!-- Fil d'Ariane stylisé -->
+        @isset($breadcrumbs)
+            <nav class="breadcrumb-container bg-light p-3 rounded mb-4 shadow-sm">
+                <ol class="breadcrumb mb-0">
+                    @foreach($breadcrumbs as $breadcrumb)
+                        <li class="breadcrumb-item {{ $loop->last ? 'active' : '' }}">
+                            @if(!$loop->last)
+                                <a href="{{ $breadcrumb['url'] }}" class="text-decoration-none">{{ $breadcrumb['name'] }}</a>
+                            @else
+                                {{ $breadcrumb['name'] }}
+                            @endif
+                        </li>
+                    @endforeach
+                </ol>
+            </nav>
+        @endisset
+
         <!-- affiche les messages d'erreurs -->
         @if(session('error'))
             <div class="alert alert-danger">

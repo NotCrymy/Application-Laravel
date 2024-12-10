@@ -57,10 +57,10 @@
         </div>
     @endcan
 
-    <!-- Section Caviste -->
-    @can('caviste-access')
+    <!-- Section cuviste -->
+    @can('cuviste-access')
         <div>
-            <h2 class="text-success text-center mb-3">Section Caviste</h2>
+            <h2 class="text-success text-center mb-3">Section Cuviste</h2>
             <div class="card shadow-sm border-success">
                 <div class="card-body">
                     <div class="row text-center">

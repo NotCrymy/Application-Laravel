@@ -3,15 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuve;
-use App\Models\Mout;
 use Illuminate\Http\Request;
 
 class CuveController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cuves = Cuve::all(); // Liste toutes les cuves
-        return view('cuves.index', compact('cuves')); // Retourne une vue temporaire
+        $query = Cuve::query();
+
+        // Recherche par ID ou nom
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('id', $search)
+                ->orWhere('nom', 'LIKE', "%$search%");
+        }
+
+        // Applique la pagination (10 cuves par page)
+        $cuves = $query->paginate(10);
+
+        return view('cuves.index', compact('cuves'));
     }
 
     public function edit(Cuve $cuve)
@@ -23,31 +33,15 @@ class CuveController extends Controller
     {
         $validated = $request->validate([
             'nom' => 'required|string|max:255',
-            'volume_max' => 'required|numeric|min:0',
         ]);
 
         $oldNom = $cuve->nom;
-        $oldVolumeMax = $cuve->volume_max;
 
-        $cuve->update($validated);
+        $cuve->update(['nom' => $validated['nom']]);
 
-        \App\Helpers\LogHelper::logAction("Modification de la cuve '{$oldNom}' : Nouveau nom = '{$cuve->nom}', Ancien volume max = '{$oldVolumeMax}', Nouveau volume max = '{$cuve->volume_max}'.");
+        \App\Helpers\LogHelper::logAction("Modification de la cuve '{$oldNom}' : Nouveau nom = '{$cuve->nom}'.");
 
         return redirect()->route('cuves.index')->with('success', 'Cuve mise à jour avec succès.');
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'volume_max' => 'required|numeric|min:0',
-        ]);
-
-        $cuve = Cuve::create($validated);
-
-        \App\Helpers\LogHelper::logAction("Création de la cuve '{$cuve->nom}' avec un volume maximum de {$cuve->volume_max} L.");
-
-        return redirect()->route('cuves.index')->with('success', 'Cuve créée avec succès.');
     }
 
     public function destroy(Cuve $cuve)
@@ -60,7 +54,6 @@ class CuveController extends Controller
 
         return redirect()->route('cuves.index')->with('success', 'Cuve supprimée avec succès.');
     }
-
 
     public function show(Cuve $cuve)
     {

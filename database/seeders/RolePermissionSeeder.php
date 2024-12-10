@@ -14,10 +14,10 @@ class RolePermissionSeeder extends Seeder
         $superAdmin = Role::create(['name' => 'super-admin']);
         $admin = Role::create(['name' => 'admin']);
         $manager = Role::create(['name' => 'manager']);
-        $caviste = Role::create(['name' => 'caviste']);
+        $cuviste = Role::create(['name' => 'cuviste']);
 
         // Création des permissions
-        Permission::create(['name' => 'manage everything']); // Super Admin exclusif
+        Permission::create(['name' => 'manage everything']);
         Permission::create(['name' => 'manage users']);
         Permission::create(['name' => 'view cuves']);
         Permission::create(['name' => 'edit cuves']);
@@ -26,6 +26,6 @@ class RolePermissionSeeder extends Seeder
         $superAdmin->givePermissionTo(Permission::all());
         $admin->givePermissionTo(['manage users', 'view cuves', 'edit cuves']);
         $manager->givePermissionTo(['view cuves']);
-        $caviste->givePermissionTo(['edit cuves']);
+        $cuviste->givePermissionTo(['edit cuves']);
     }
 }

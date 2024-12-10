@@ -8,7 +8,6 @@ Dashboard Gestion des Users
 Apres modif message Cuve [xxx] mise à jour / User ….
 
 Détail Cuve
-	- supprimer l'id
 	- inclure Charts du taux de remplissage
 	- changer intitulé btn > ajouter un mout
 	- ajouter un mout > menu déroulant : liste des mouts
@@ -16,8 +15,4 @@ Détail Cuve
 
 Liste des Cuves
 	- Ajouter une cuve : champs : nom + volume + propriétaire + % de mout si 2 mouts différents (% menier par rapport % pinot)
-	- champ recherche
 	- apres modif ne pas revenir à la liste
-
-Sur tous les vues : ajouter : fil d'ariane
-

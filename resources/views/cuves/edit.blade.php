@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container">
-<h1>Modifier la Cuve : {{ $cuve->nom }}</h1>
+    <h1>Modifier la Cuve : {{ $cuve->nom }}</h1>
     
     <!-- Formulaire pour la mise à jour -->
     <form action="{{ route('cuves.update', $cuve) }}" method="POST">
@@ -15,10 +15,10 @@
             <label for="nom" class="form-label">Nom de la Cuve</label>
             <input type="text" class="form-control" id="nom" name="nom" value="{{ $cuve->nom }}" required>
         </div>
-        
+
         <div class="mb-3">
             <label for="volume_max" class="form-label">Volume Maximum (L)</label>
-            <input type="number" step="0.01" class="form-control" id="volume_max" name="volume_max" value="{{ $cuve->volume_max }}" required>
+            <input type="number" step="0.01" class="form-control" id="volume_max" name="volume_max" value="{{ $cuve->volume_max }}" disabled>
         </div>
 
         <button type="submit" class="btn btn-success">Enregistrer les Modifications</button>
@@ -61,5 +61,28 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Formulaire pour ajouter un moût -->
+    <h3 class="mt-5">Ajouter un Moût</h3>
+    <form action="{{ route('cuves.mouts.store', $cuve) }}" method="POST">
+        @csrf
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="type" class="form-label">Type</label>
+                <input type="text" class="form-control" id="type" name="type" placeholder="Type de moût" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="origine" class="form-label">Origine</label>
+                <input type="text" class="form-control" id="origine" name="origine" placeholder="Origine du moût" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="volume" class="form-label">Volume (L)</label>
+                <input type="number" step="0.01" class="form-control" id="volume" name="volume" placeholder="Volume" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ajouter le Moût</button>
+    </form>
 </div>
 @endsection

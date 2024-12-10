@@ -27,16 +27,38 @@
                     <td>{{ $mout->origine }}</td>
                     <td>{{ $mout->volume }} L</td>
                     <td>
-                        <form action="{{ route('mouts.destroy', [$cuve, $mout]) }}" method="POST">
+                        @can('edit-mout') <!-- Vérifie les permissions -->
+                        <form action="{{ route('mouts.destroy', [$cuve, $mout]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                         </form>
+                        <a href="{{ route('mouts.edit', [$cuve, $mout]) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        @endcan
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning">Modifier la Cuve</a>
+
+    @can('add-mout') <!-- Vérifie les permissions pour ajouter -->
+    <h2>Ajouter un Moût</h2>
+    <form action="{{ route('cuves.mouts.store', $cuve) }}" method="POST">
+        @csrf
+        <div class="mb-3">
+            <label for="type" class="form-label">Type</label>
+            <input type="text" class="form-control" id="type" name="type" required>
+        </div>
+        <div class="mb-3">
+            <label for="origine" class="form-label">Origine</label>
+            <input type="text" class="form-control" id="origine" name="origine" required>
+        </div>
+        <div class="mb-3">
+            <label for="volume" class="form-label">Volume (L)</label>
+            <input type="number" step="0.01" class="form-control" id="volume" name="volume" required>
+        </div>
+        <button type="submit" class="btn btn-success">Ajouter</button>
+    </form>
+    @endcan
 </div>
 @endsection
