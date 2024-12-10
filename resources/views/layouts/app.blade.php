@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'BreakingWine')</title>
-    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ asset('favicon.ico') }}">
     <!-- Ajout du CSS compilé avec SCSS -->
     @vite('resources/sass/app.scss')
 </head>
@@ -18,7 +19,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                @if(!Route::is('login')) <!-- Ne pas afficher ces boutons si la route est 'login' -->
+                @if(!Route::is('login')) <!-- Ne pas afficher les boutons si la route est 'login' -->
                     <ul class="navbar-nav ms-auto align-items-center">
                         <!-- Bouton retour au dashboard -->
                         <li class="nav-item me-2">

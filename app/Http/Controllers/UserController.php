@@ -70,7 +70,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
-            'role' => 'required|exists:roles,name', // Valider que le rôle existe
+            'role' => 'required|exists:roles,name',
         ]);
 
         // Met à jour les informations de l'utilisateur
