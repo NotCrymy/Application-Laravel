@@ -10,33 +10,49 @@ use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run()
     {
-        // Appel du RolePermissionSeeder pour créer les rôles et permissions
+        // Appelle le seeder des rôles
         $this->call(RolePermissionSeeder::class);
 
-        // Crée le premier utilisateur admin
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
+        // Récupère les rôles
+        $superAdminRole = Role::firstWhere('name', 'super-admin');
+        $adminRole = Role::firstWhere('name', 'admin');
+        $cuvisteRole = Role::firstWhere('name', 'cuviste');
+        $managerRole = Role::firstWhere('name', 'manager');
 
-        // Crée le premier utilisateur en tant que super admin
+        // Crée des utilisateurs spécifiques avec rôles
         $superAdmin = User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'superadmin@domain.com',
-            'password' => bcrypt('password'),
         ]);
-
         $superAdmin->assignRole($superAdminRole);
 
-        // Ajoutez les autres utilisateurs ici
-        User::factory(10)->create();
+        $admin = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@domain.com',
+        ]);
+        $admin->assignRole($adminRole);
 
-        // Crée 10 cuves
-        Cuve::factory(10)->create();
+        $cuviste = User::factory()->create([
+            'name' => 'Cuviste User',
+            'email' => 'cuviste@domain.com',
+        ]);
+        $cuviste->assignRole($cuvisteRole);
 
-        // Crée 50 moûts, assignés aléatoirement aux cuves
-        Mout::factory(50)->create();
+        $manager = User::factory()->create([
+            'name' => 'Manager User',
+            'email' => 'manager@domain.com',
+        ]);
+        $manager->assignRole($managerRole);
+
+        // Crée 16 autres utilisateurs aléatoires
+        User::factory(16)->create();
+
+        // Crée 20 cuves
+        Cuve::factory(20)->create()->each(function ($cuve) {
+            // Pour chaque cuve, crée 2 à 5 moûts
+            Mout::factory(rand(2, 5))->create(['cuve_id' => $cuve->id]);
+        });
     }
 }

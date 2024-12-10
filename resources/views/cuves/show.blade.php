@@ -8,7 +8,8 @@
     <p><strong>Volume Maximum :</strong> {{ $cuve->volume_max }} L</p>
     <p><strong>Volume Utilisé :</strong> {{ $cuve->volumeTotal() }} L</p>
 
-    <h2>Moûts Contenus dans la Cuve</h2>
+    <!-- Tableau des moûts -->
+    <h2 class="mt-5">Moûts Contenus dans la Cuve</h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -27,21 +28,18 @@
                     <td>{{ $mout->origine }}</td>
                     <td>{{ $mout->volume }} L</td>
                     <td>
-                        @can('edit-mout') <!-- Vérifie les permissions -->
                         <form action="{{ route('mouts.destroy', [$cuve, $mout]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                         </form>
-                        <a href="{{ route('mouts.edit', [$cuve, $mout]) }}" class="btn btn-primary btn-sm">Modifier</a>
-                        @endcan
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    @can('add-mout') <!-- Vérifie les permissions pour ajouter -->
+    @can('add-mout')
     <h2>Ajouter un Moût</h2>
     <form action="{{ route('cuves.mouts.store', $cuve) }}" method="POST">
         @csrf

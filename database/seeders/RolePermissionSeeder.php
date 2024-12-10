@@ -13,8 +13,8 @@ class RolePermissionSeeder extends Seeder
         // Création des rôles
         $superAdmin = Role::create(['name' => 'super-admin']);
         $admin = Role::create(['name' => 'admin']);
-        $manager = Role::create(['name' => 'manager']);
         $cuviste = Role::create(['name' => 'cuviste']);
+        $manager = Role::create(['name' => 'manager']);
 
         // Création des permissions
         Permission::create(['name' => 'manage everything']);
@@ -25,7 +25,7 @@ class RolePermissionSeeder extends Seeder
         // Assignation des permissions
         $superAdmin->givePermissionTo(Permission::all());
         $admin->givePermissionTo(['manage users', 'view cuves', 'edit cuves']);
-        $manager->givePermissionTo(['view cuves']);
         $cuviste->givePermissionTo(['edit cuves']);
+        $manager->givePermissionTo(['view cuves']);
     }
 }

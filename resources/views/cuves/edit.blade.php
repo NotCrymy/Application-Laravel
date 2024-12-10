@@ -36,7 +36,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
                 <th>Type</th>
                 <th>Origine</th>
                 <th>Volume</th>
@@ -50,7 +49,7 @@
                     <td>{{ $mout->type }}</td>
                     <td>{{ $mout->origine }}</td>
                     <td>{{ $mout->volume }} L</td>
-                    <td>
+                    <td class="text-end">
                         <form action="{{ route('mouts.destroy', [$cuve, $mout]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
@@ -61,6 +60,7 @@
             @endforeach
         </tbody>
     </table>
+
 
     <!-- Formulaire pour ajouter un moût -->
     <h3 class="mt-5">Ajouter un Moût</h3>

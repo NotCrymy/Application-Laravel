@@ -11,7 +11,7 @@ class CreateCuvesTable extends Migration
         Schema::create('cuves', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->decimal('volume_max', 10, 2);
+            $table->float('volume_max', 2); // En litres
             $table->timestamps();
         });
     }

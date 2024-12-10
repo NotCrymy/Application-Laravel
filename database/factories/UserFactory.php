@@ -20,16 +20,4 @@ class UserFactory extends Factory
             'password' => Hash::make('password'), // Mot de passe par défaut
         ];
     }
-
-    /**
-     * State spécifique pour l'admin.
-     */
-    public function admin()
-    {
-        return $this->state(fn (array $attributes) => [
-            'name' => 'Admin User',
-            'email' => 'admin@pass',
-            'password' => Hash::make('password'),
-        ]);
-    }
 }

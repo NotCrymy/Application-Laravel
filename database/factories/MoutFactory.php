@@ -14,10 +14,22 @@ class MoutFactory extends Factory
      */
     public function definition()
     {
+        // Liste des origines françaises
+        $originesFrancaises = [
+            'Bordeaux', 'Bourgogne', 'Champagne', 'Alsace', 'Provence', 
+            'Loire', 'Languedoc', 'Jura', 'Roussillon', 'Côtes-du-Rhône'
+        ];
+
+        // Liste des types de moûts
+        $typesDeMouts = [
+            'Chardonnay', 'Merlot', 'Pinot Noir', 'Syrah', 'Cabernet Sauvignon',
+            'Sauvignon Blanc', 'Grenache', 'Malbec', 'Gamay', 'Viognier'
+        ];
+
         return [
-            'volume' => $this->faker->randomFloat(2, 10, 100),
-            'type' => $this->faker->randomElement(['Chardonnay', 'Pinot Noir', 'Meunier']),
-            'origine' => $this->faker->address,
+            'type' => $this->faker->randomElement($typesDeMouts),
+            'origine' => $this->faker->randomElement($originesFrancaises),
+            'volume' => $this->faker->numberBetween(50, 500), // Volume en litres
             'cuve_id' => Cuve::factory(),
         ];
     }

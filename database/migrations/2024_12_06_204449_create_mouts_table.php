@@ -10,13 +10,14 @@ class CreateMoutsTable extends Migration
     {
         Schema::create('mouts', function (Blueprint $table) {
             $table->id();
-            $table->decimal('volume', 10, 2);
             $table->string('type');
             $table->string('origine');
+            $table->float('volume', 8);
             $table->foreignId('cuve_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
+
 
     public function down()
     {

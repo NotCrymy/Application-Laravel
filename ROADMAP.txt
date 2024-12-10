@@ -1,7 +1,6 @@
 Dashboard Gestion des Users
 	- ajouter champ de recherche
 	- critere de filtre par colonne
-	- popup d'avertissement en cas de changement d'état (delete)
 	- envoi du mot de passe par email
 	- gestion des mouts : appelation, origine 
 
@@ -9,10 +8,7 @@ Apres modif message Cuve [xxx] mise à jour / User ….
 
 Détail Cuve
 	- inclure Charts du taux de remplissage
-	- changer intitulé btn > ajouter un mout
 	- ajouter un mout > menu déroulant : liste des mouts
-	- modifier le volume du mout
 
 Liste des Cuves
 	- Ajouter une cuve : champs : nom + volume + propriétaire + % de mout si 2 mouts différents (% menier par rapport % pinot)
-	- apres modif ne pas revenir à la liste

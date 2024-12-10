@@ -57,7 +57,13 @@ class CuveController extends Controller
 
     public function show(Cuve $cuve)
     {
-        $cuve->load('mouts'); // Charge les moûts associés à la cuve
-        return view('cuves.show', compact('cuve'));
+        $mouts = $cuve->mouts->map(function ($mout) {
+            return [
+                'name' => $mout->type,
+                'value' => $mout->volume,
+            ];
+        });
+
+        return view('cuves.show', compact('cuve', 'mouts'));
     }
 }
