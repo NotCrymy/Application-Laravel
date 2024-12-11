@@ -26,15 +26,17 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // Routes pour les cuves
-    Route::get('/cuves', [CuveController::class, 'index'])->name('cuves.index');
-    Route::get('/cuves/{cuve}', [CuveController::class, 'show'])->name('cuves.show'); // Voir les détails d'une cuve
-    Route::get('/cuves/{cuve}/edit', [CuveController::class, 'edit'])->name('cuves.edit'); // Modifier une cuve
-    Route::delete('/cuves/{cuve}', [CuveController::class, 'destroy'])->name('cuves.destroy'); // Suppr une cuve
-    Route::put('/cuves/{cuve}', [CuveController::class, 'update'])->name('cuves.update'); // Mettre à jour une cuve
+    Route::get('/cuves', [CuveController::class, 'index'])->name('cuves.index'); // Voir toutes les cuves
+    Route::get('/cuves/{cuve}', [CuveController::class, 'show'])->name('cuves.show'); // Détails d'une cuve (moûts inclus)
+    Route::get('/cuves/{cuve}/edit', [CuveController::class, 'edit'])->name('cuves.edit'); // Modifier une cuve et gérer les moûts
+    Route::put('/cuves/{cuve}', [CuveController::class, 'update'])->name('cuves.update'); // Mise à jour de la cuve
+    Route::delete('/cuves/{cuve}', [CuveController::class, 'destroy'])->name('cuves.destroy'); // Supprimer une cuve
+
+    // Actions sur les moûts dans le contexte des cuves
     Route::post('/cuves/{cuve}/mouts', [MoutController::class, 'store'])->name('cuves.mouts.store'); // Ajouter un moût
-    Route::get('/cuves/{cuve}/mouts/{mout}/edit', [MoutController::class, 'edit'])->name('mouts.edit'); //Modifier un mout
-    Route::put('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'update'])->name('mouts.update'); // Mise à jour du mout
-    Route::delete('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'destroy'])->name('mouts.destroy'); // Supprimer un moût
+    Route::put('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'update'])->name('cuves.mouts.update'); // Mettre à jour un moût
+    Route::delete('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'destroy'])->name('cuves.mouts.destroy'); // Supprimer un moût
+
 
     // Routes pour les utilisateurs (admin uniquement)
     Route::middleware(['can:admin-access'])->group(function () {

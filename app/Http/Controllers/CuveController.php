@@ -4,24 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Cuve;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CuveController extends Controller
 {
-    public function index(Request $request)
+    use AuthorizesRequests;
+    public function index()
     {
-        $query = Cuve::query();
-
-        // Recherche par ID ou nom
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('id', $search)
-                ->orWhere('nom', 'LIKE', "%$search%");
-        }
-
-        // Applique la pagination (10 cuves par page)
-        $cuves = $query->paginate(10);
-
+        $cuves = Cuve::with('mouts')->paginate(10);
         return view('cuves.index', compact('cuves'));
+    }
+
+    public function show(Cuve $cuve)
+    {
+        return view('cuves.show', compact('cuve'));
     }
 
     public function edit(Cuve $cuve)
@@ -35,31 +31,14 @@ class CuveController extends Controller
             'nom' => 'required|string|max:255',
         ]);
 
-        $oldNom = $cuve->nom;
-
-        $cuve->update(['nom' => $validated['nom']]);
-
-        \App\Helpers\LogHelper::logAction("Modification de la cuve '{$oldNom}' : Nouveau nom = '{$cuve->nom}'.");
+        $cuve->update($validated);
 
         return redirect()->route('cuves.index')->with('success', 'Cuve mise à jour avec succès.');
     }
 
     public function destroy(Cuve $cuve)
     {
-        $nom = $cuve->nom;
-
         $cuve->delete();
-
-        \App\Helpers\LogHelper::logAction("Suppression de la cuve '{$nom}'.");
-
         return redirect()->route('cuves.index')->with('success', 'Cuve supprimée avec succès.');
-    }
-
-    public function show(Cuve $cuve)
-    {
-        // Charger les moûts associés à la cuve
-        $cuve->load('mouts');
-
-        return view('cuves.show', compact('cuve'));
     }
 }

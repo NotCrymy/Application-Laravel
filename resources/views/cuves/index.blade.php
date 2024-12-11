@@ -34,12 +34,12 @@
                     <td>{{ $cuve->volumeTotal() }} L</td>
                     <td>
                         <!-- Bouton Voir la Cuve -->
-                        @canany(['cuviste-access', 'manager-access'])
+                        @canany('view', $cuve)
                             <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir la Cuve</a>
                         @endcanany
 
                         <!-- Bouton Modifier le Moût -->
-                        @can('cuviste-access')
+                        @can('update', $cuve)
                             @if($cuve->mouts->count() > 0)
                                 <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier les Moûts</a>
                             @endif

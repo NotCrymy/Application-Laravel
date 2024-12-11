@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -87,9 +88,13 @@ class AppServiceProvider extends ServiceProvider
                 ],
             ];
     
-            $routeName = \Route::currentRouteName();
+            $routeName = Route::currentRouteName();
             $breadcrumbs = $breadcrumbsConfig[$routeName] ?? [];
             $view->with('breadcrumbs', $breadcrumbs);
         });
     }
+
+    protected $policies = [
+        \App\Models\Cuve::class => \App\Policies\CuvePolicy::class,
+    ];
 }
