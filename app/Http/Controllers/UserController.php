@@ -13,9 +13,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all(); // Liste tous les utilisateurs
-        $roles = Role::all(); // Récupère tous les rôles
-        $defaultRole = 'cuviste'; // Rôle par défaut
+        $users = User::all();
+        $roles = Role::all();
+        $defaultRole = 'cuviste';
+
+        \App\Helpers\LogHelper::logAction("Consultation de la liste des utilisateurs.");
+
         return view('users.index', compact('users', 'roles', 'defaultRole'));
     }
 
@@ -24,7 +27,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation des données
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -32,20 +34,19 @@ class UserController extends Controller
             'role' => 'required|exists:roles,name',
         ]);
 
-        // Vérifie si l'utilisateur essaie d'ajouter un administrateur
         if ($validated['role'] === 'admin' && !auth()->user()->can('manage-admins')) {
             return redirect()->route('users.index')->withErrors('error', 'Vous n\'êtes pas autorisé à ajouter un administrateur.');
         }
 
-        // Création de l'utilisateur
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
 
-        // Attribution du rôle
         $user->assignRole($validated['role']);
+
+        \App\Helpers\LogHelper::logAction("Création de l'utilisateur '{$user->name}' avec le rôle '{$validated['role']}'.");
 
         return redirect()->route('users.index')->with('success', 'Utilisateur ajouté avec succès.');
     }
@@ -55,14 +56,17 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id); // Trouver l'utilisateur
-        $roles = Role::all(); // Récupérer tous les rôles disponibles
-        $defaultRole = 'cuviste'; // Rôle par défaut
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        $defaultRole = 'cuviste';
+
+        \App\Helpers\LogHelper::logAction("Accès à l'édition de l'utilisateur '{$user->name}'.");
+
         return view('users.edit', compact('user', 'roles', 'defaultRole'));
     }
 
     /**
-     * Met à jour les informations d'un utilisateur (y compris le rôle).
+     * Met à jour les informations d'un utilisateur.
      */
     public function update(Request $request, User $user)
     {
@@ -73,15 +77,18 @@ class UserController extends Controller
             'role' => 'required|exists:roles,name',
         ]);
 
-        // Met à jour les informations de l'utilisateur
+        $oldName = $user->name;
+        $oldEmail = $user->email;
+
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'] ? bcrypt($validated['password']) : $user->password,
         ]);
 
-        // Met à jour le rôle
         $user->syncRoles([$validated['role']]);
+
+        \App\Helpers\LogHelper::logAction("Mise à jour de l'utilisateur '{$oldName}' : Nouveau nom = '{$user->name}', Nouveau rôle = '{$validated['role']}', Ancien email = '{$oldEmail}', Nouvel email = '{$user->email}'.");
 
         return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
     }
@@ -93,36 +100,44 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Vérifie si l'utilisateur est un administrateur
         if ($user->hasRole('admin') && !auth()->user()->can('manage-admins')) {
             return redirect()->route('users.index')->withErrors('error', 'Vous n\'êtes pas autorisé à supprimer un administrateur.');
         }
 
-        // Vérifie si l'utilisateur essaie de se supprimer lui-même
         if (auth()->id() === $user->id) {
             return redirect()->route('users.index')->withErrors('error', 'Vous ne pouvez pas vous supprimer vous-même.');
         }
 
-        // Supprime l'utilisateur
+        $userName = $user->name;
+        $userRole = $user->getRoleNames()->join(', ');
+
         $user->delete();
+
+        \App\Helpers\LogHelper::logAction("Suppression de l'utilisateur '{$userName}' avec le(s) rôle(s) '{$userRole}'.");
 
         return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
 
+    /**
+     * Met à jour le rôle d'un utilisateur.
+     */
     public function updateRole(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        // Vérifie si l'utilisateur est un super admin
         if ($user->hasRole('super-admin')) {
             return redirect()->route('users.index')->withErrors('error', 'Le rôle du super administrateur ne peut pas être modifié.');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'role' => 'required|exists:roles,name',
         ]);
 
-        $user->syncRoles([$request->input('role')]);
+        $oldRoles = $user->getRoleNames()->join(', ');
+
+        $user->syncRoles([$validated['role']]);
+
+        \App\Helpers\LogHelper::logAction("Mise à jour des rôles de l'utilisateur '{$user->name}' : Ancien(s) rôle(s) = '{$oldRoles}', Nouveau rôle = '{$validated['role']}'.");
 
         return redirect()->route('users.index')->with('success', 'Le rôle de l\'utilisateur a été mis à jour avec succès.');
     }
