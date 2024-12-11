@@ -20,7 +20,10 @@ class MoutController extends Controller
             return back()->withErrors(['volume' => 'Le volume dépasse la capacité de la cuve.']);
         }
 
-        $cuve->mouts()->create($validated);
+        $mout = $cuve->mouts()->create($validated);
+
+        // Ajout d'un log
+        \App\Helpers\LogHelper::logAction("Ajout du moût '{$mout->type}' ({$mout->volume} L) à la cuve '{$cuve->nom}'.");
 
         return back()->with('success', 'Moût ajouté avec succès.');
     }
@@ -39,12 +42,22 @@ class MoutController extends Controller
 
         $mout->update($validated);
 
+        // Ajout d'un log
+        \App\Helpers\LogHelper::logAction("Modification du moût '{$mout->type}' dans la cuve '{$cuve->nom}': Nouveau volume = {$mout->volume} L, Nouvelle origine = {$mout->origine}.");
+
         return back()->with('success', 'Moût mis à jour avec succès.');
     }
 
     public function destroy(Cuve $cuve, Mout $mout)
     {
+        $moutType = $mout->type;
+        $moutVolume = $mout->volume;
+
         $mout->delete();
+
+        // Ajout d'un log
+        \App\Helpers\LogHelper::logAction("Suppression du moût '{$moutType}' ({$moutVolume} L) de la cuve '{$cuve->nom}'.");
+
         return back()->with('success', 'Moût supprimé avec succès.');
     }
 }

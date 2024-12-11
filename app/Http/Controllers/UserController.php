@@ -34,7 +34,7 @@ class UserController extends Controller
 
         // Vérifie si l'utilisateur essaie d'ajouter un administrateur
         if ($validated['role'] === 'admin' && !auth()->user()->can('manage-admins')) {
-            return redirect()->route('users.index')->with('error', 'Vous n\'êtes pas autorisé à ajouter un administrateur.');
+            return redirect()->route('users.index')->withErrors('error', 'Vous n\'êtes pas autorisé à ajouter un administrateur.');
         }
 
         // Création de l'utilisateur
@@ -95,12 +95,12 @@ class UserController extends Controller
 
         // Vérifie si l'utilisateur est un administrateur
         if ($user->hasRole('admin') && !auth()->user()->can('manage-admins')) {
-            return redirect()->route('users.index')->with('error', 'Vous n\'êtes pas autorisé à supprimer un administrateur.');
+            return redirect()->route('users.index')->withErrors('error', 'Vous n\'êtes pas autorisé à supprimer un administrateur.');
         }
 
         // Vérifie si l'utilisateur essaie de se supprimer lui-même
         if (auth()->id() === $user->id) {
-            return redirect()->route('users.index')->with('error', 'Vous ne pouvez pas vous supprimer vous-même.');
+            return redirect()->route('users.index')->withErrors('error', 'Vous ne pouvez pas vous supprimer vous-même.');
         }
 
         // Supprime l'utilisateur
@@ -115,7 +115,7 @@ class UserController extends Controller
 
         // Vérifie si l'utilisateur est un super admin
         if ($user->hasRole('super-admin')) {
-            return redirect()->route('users.index')->with('error', 'Le rôle du super administrateur ne peut pas être modifié.');
+            return redirect()->route('users.index')->withErrors('error', 'Le rôle du super administrateur ne peut pas être modifié.');
         }
 
         $request->validate([
