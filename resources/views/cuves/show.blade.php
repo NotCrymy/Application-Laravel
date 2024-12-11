@@ -17,6 +17,7 @@
                 <th>Origine</th>
                 <th>Volume</th>
                 <th>Propriétaire</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -28,9 +29,11 @@
                     <td>
                         @if($mout->proprietaire)
                             {{ $mout->proprietaire->nom }} {{ $mout->proprietaire->prenom }}
+                        <td>
                             <a href="{{ route('proprietaires.show', $mout->proprietaire) }}" class="btn btn-info btn-sm" style="margin-left:10px;">
-                                Voir Détails
+                                Voir le proprietaire
                             </a>
+                        </td>
                         @else
                             N/A
                         @endif

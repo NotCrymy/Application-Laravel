@@ -88,7 +88,7 @@ class AppServiceProvider extends ServiceProvider
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
                     ['name' => 'Cuves', 'url' => route('cuves.index')],
                     ['name' => 'Détails de la Cuve', 'url' => $cuveId ? route('cuves.show', $cuveId) : route('cuves.index')],
-                    ['name' => 'Détails du Propriétaire', 'url' => null],
+                    ['name' => 'Fiche du Propriétaire', 'url' => null],
                 ],
                 'users.edit' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],

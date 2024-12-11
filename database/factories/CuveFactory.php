@@ -15,7 +15,7 @@ class CuveFactory extends Factory
     {
         return [
             'nom' => 'Cuve ' . $this->faker->unique()->word,
-            'volume_max' => $this->faker->numberBetween(500, 5000), // Volume aléatoire en litres
+            'volume_max' => $this->faker->numberBetween(30, 50) * 100, // Volume aléatoire en litres
         ];
     }
 }

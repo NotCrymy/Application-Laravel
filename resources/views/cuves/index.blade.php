@@ -47,6 +47,15 @@
                             <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier</a>
                         @endcan
 
+                        <!-- Bouton Supprimer Définitivement -->
+                        @can('delete', $cuve)
+                            <form action="{{ route('cuves.forceDelete', $cuve->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
+                            </form>
+                        @endcan
+
                         @can('update', $cuve)
                             <!-- Bouton Restaurer -->
                             @if($cuve->trashed())
@@ -55,15 +64,6 @@
                                     <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
                                 </form>
                             @endif
-                        @endcan
-
-                        <!-- Bouton Supprimer Définitivement -->
-                        @can('delete', $cuve)
-                            <form action="{{ route('cuves.forceDelete', $cuve->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
-                            </form>
                         @endcan
                     </td>
                 </tr>

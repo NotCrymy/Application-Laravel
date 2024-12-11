@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Détails du Propriétaire')
+@section('title', 'Fiche du Propriétaire')
 
 @section('content')
 <div class="container">
-    <h1>Détails du Propriétaire</h1>
+    <h1>Fiche du Propriétaire</h1>
     <p><strong>Nom :</strong> {{ $proprietaire->nom }}</p>
     <p><strong>Prénom :</strong> {{ $proprietaire->prenom }}</p>
     <p><strong>Téléphone :</strong> {{ $proprietaire->numtel }}</p>
