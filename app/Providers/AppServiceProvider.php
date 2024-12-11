@@ -50,6 +50,13 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function ($view) {
+            $route = request()->route();
+            $proprietaire = $route->parameter('proprietaire');
+
+            $cuveId = null;
+            if ($proprietaire && $proprietaire->mouts->isNotEmpty()) {
+                $cuveId = $proprietaire->mouts->first()->cuve->id;
+            }
             $breadcrumbsConfig = [
                 'dashboard' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
@@ -71,11 +78,17 @@ class AppServiceProvider extends ServiceProvider
                 'mouts.edit' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
                     ['name' => 'Cuves', 'url' => route('cuves.index')],
-                    ['name' => 'Modifier le Mout', 'url' => null],
+                    ['name' => 'Gestion des Moûts de la Cuve', 'url' => null],
                 ],
                 'users.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
                     ['name' => 'Utilisateurs', 'url' => route('users.index')],
+                ],
+                'proprietaires.show' => [
+                    ['name' => 'Dashboard', 'url' => route('dashboard')],
+                    ['name' => 'Cuves', 'url' => route('cuves.index')],
+                    ['name' => 'Détails de la Cuve', 'url' => $cuveId ? route('cuves.show', $cuveId) : route('cuves.index')],
+                    ['name' => 'Détails du Propriétaire', 'url' => null],
                 ],
                 'users.edit' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],

@@ -6,13 +6,14 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Cuve;
 use App\Models\Mout;
+use App\Models\Proprietaire;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Appelle le seeder des rôles
+        // Appelle le seeder des rôles et permissions
         $this->call(RolePermissionSeeder::class);
 
         // Récupère les rôles
@@ -49,10 +50,16 @@ class DatabaseSeeder extends Seeder
         // Crée 16 autres utilisateurs aléatoires
         User::factory(16)->create();
 
+        // Crée une liste de propriétaires
+        $proprietaires = Proprietaire::factory(10)->create();
+
         // Crée 20 cuves
-        Cuve::factory(20)->create()->each(function ($cuve) {
-            // Pour chaque cuve, crée 2 à 5 moûts
-            Mout::factory(rand(2, 5))->create(['cuve_id' => $cuve->id]);
+        Cuve::factory(20)->create()->each(function ($cuve) use ($proprietaires) {
+            // Pour chaque cuve, crée 2 à 5 moûts avec un propriétaire aléatoire
+            Mout::factory(rand(2, 5))->create([
+                'cuve_id' => $cuve->id,
+                'proprietaire_id' => $proprietaires->random()->id,
+            ]);
         });
     }
 }

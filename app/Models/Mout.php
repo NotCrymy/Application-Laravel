@@ -9,10 +9,21 @@ class Mout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['volume', 'type', 'origine', 'cuve_id'];
+    protected $fillable = ['volume', 'type', 'origine', 'cuve_id', 'proprietaire_id'];
 
     public function cuve()
     {
         return $this->belongsTo(Cuve::class);
+    }
+
+    public function proprietaire()
+    {
+        return $this->belongsTo(Proprietaire::class);
+    }
+
+    public function edit(Cuve $cuve)
+    {
+        $proprietaires = \App\Models\Proprietaire::all();
+        return view('mouts.edit', compact('cuve', 'proprietaires'));
     }
 }

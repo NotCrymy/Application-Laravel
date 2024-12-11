@@ -16,6 +16,7 @@
                 <th>Type</th>
                 <th>Origine</th>
                 <th>Volume</th>
+                <th>Propriétaire</th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +25,16 @@
                     <td>{{ $mout->type }}</td>
                     <td>{{ $mout->origine }}</td>
                     <td>{{ $mout->volume }} L</td>
+                    <td>
+                        @if($mout->proprietaire)
+                            {{ $mout->proprietaire->nom }} {{ $mout->proprietaire->prenom }}
+                            <a href="{{ route('proprietaires.show', $mout->proprietaire) }}" class="btn btn-info btn-sm" style="margin-left:10px;">
+                                Voir Détails
+                            </a>
+                        @else
+                            N/A
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

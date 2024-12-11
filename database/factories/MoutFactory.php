@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use app\Models\Cuve;
+use App\Models\Proprietaire;
 
 class MoutFactory extends Factory
 {
@@ -31,6 +32,7 @@ class MoutFactory extends Factory
             'origine' => $this->faker->randomElement($originesFrancaises),
             'volume' => $this->faker->numberBetween(50, 500), // Volume en litres
             'cuve_id' => Cuve::factory(),
+            'proprietaire_id' => Proprietaire::factory(),
         ];
     }
 }

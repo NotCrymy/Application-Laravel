@@ -100,22 +100,34 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        // Vérifications avant suppression
         if ($user->hasRole('admin') && !auth()->user()->can('manage-admins')) {
-            return redirect()->route('users.index')->withErrors('error', 'Vous n\'êtes pas autorisé à supprimer un administrateur.');
+            return redirect()->route('users.index')->withErrors('Vous n\'êtes pas autorisé à supprimer un administrateur.');
         }
 
         if (auth()->id() === $user->id) {
-            return redirect()->route('users.index')->withErrors('error', 'Vous ne pouvez pas vous supprimer vous-même.');
+            return redirect()->route('users.index')->withErrors('Vous ne pouvez pas vous supprimer vous-même.');
         }
 
-        $userName = $user->name;
-        $userRole = $user->getRoleNames()->join(', ');
+        $user->delete(); // Soft delete
+        \App\Helpers\LogHelper::logAction("Utilisateur '{$user->name}' soft deleted.");
+        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès (soft delete).');
+    }
 
-        $user->delete();
+    public function restore($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+        \App\Helpers\LogHelper::logAction("Utilisateur '{$user->name}' restored.");
+        return redirect()->route('users.index')->with('success', 'Utilisateur restauré avec succès.');
+    }
 
-        \App\Helpers\LogHelper::logAction("Suppression de l'utilisateur '{$userName}' avec le(s) rôle(s) '{$userRole}'.");
-
-        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
+    public function forceDelete($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->forceDelete();
+        \App\Helpers\LogHelper::logAction("Utilisateur '{$user->name}' permanently deleted.");
+        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé définitivement.');
     }
 
     /**

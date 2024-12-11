@@ -10,10 +10,24 @@ class CuveController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $cuves = Cuve::with('mouts')->paginate(10);
-        return view('cuves.index', compact('cuves'));
+        $search = $request->input('search');
+
+        // Requete à la base donnée
+        $query = Cuve::withTrashed();
+
+        // Si une recherche est effectuée
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nom', 'LIKE', '%' . $search . '%')
+                    ->orWhere('id', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $cuves = $query->paginate(10);
+
+        return view('cuves.index', compact('cuves', 'search'));
     }
 
     public function show(Cuve $cuve)
@@ -50,13 +64,26 @@ class CuveController extends Controller
 
     public function destroy(Cuve $cuve)
     {
-        $cuveName = $cuve->nom;
+        $cuve->delete(); // Soft delete
 
-        $cuve->delete();
+        \App\Helpers\LogHelper::logAction("Cuve '{$cuve->nom}' soft deleted.");
 
-        // Ajout d'un log pour la suppression de la cuve
-        \App\Helpers\LogHelper::logAction("Suppression de la cuve '{$cuveName}'.");
+        return redirect()->route('cuves.index')->with('success', 'Cuve supprimée avec succès (soft delete).');
+    }
 
-        return redirect()->route('cuves.index')->with('success', 'Cuve supprimée avec succès.');
+    public function restore($id)
+    {
+        $cuve = Cuve::withTrashed()->findOrFail($id);
+        $cuve->restore();
+        \App\Helpers\LogHelper::logAction("Cuve '{$cuve->nom}' restored.");
+        return redirect()->route('cuves.index')->with('success', 'Cuve restaurée avec succès.');
+    }
+
+    public function forceDelete($id)
+    {
+        $cuve = Cuve::withTrashed()->findOrFail($id);
+        $cuve->forceDelete();
+        \App\Helpers\LogHelper::logAction("Cuve '{$cuve->nom}' permanently deleted.");
+        return redirect()->route('cuves.index')->with('success', 'Cuve supprimée définitivement.');
     }
 }

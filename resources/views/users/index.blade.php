@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <!-- Table des utilisateurs -->
+    <!-- Tableau des utilisateurs -->
     <h2 class="mb-3">Liste des Utilisateurs</h2>
     <table class="table table-striped">
         <thead>
@@ -68,13 +68,24 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->roles->pluck('name')->join(', ') }}</td>
-                    <td>
+                    <td class="d-flex justify-content-end gap-2">
                         @if(!$user->hasRole('super-admin'))
+                            <!-- Bouton Modifier -->
                             <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">Modifier</a>
-                            <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline">
+
+                            <!-- Bouton Restaurer -->
+                            @if($user->trashed())
+                                <form action="{{ route('users.restore', $user->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
+                                </form>
+                            @endif
+
+                            <!-- Bouton Supprimer Définitivement -->
+                            <form action="{{ route('users.forceDelete', $user->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
                             </form>
                         @else
                             <span class="badge bg-secondary">Super Admin</span>

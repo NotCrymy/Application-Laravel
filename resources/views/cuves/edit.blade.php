@@ -39,6 +39,7 @@
                 <th>Type</th>
                 <th>Origine</th>
                 <th>Volume</th>
+                <th>Propriétaire</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -48,6 +49,7 @@
                     <td>{{ $mout->type }}</td>
                     <td>{{ $mout->origine }}</td>
                     <td>{{ $mout->volume }} L</td>
+                    <td>{{ $mout->proprietaire ? $mout->proprietaire->nom.' '.$mout->proprietaire->prenom : 'N/A' }}</td>
                     <td>
                         <form action="{{ route('cuves.mouts.destroy', [$cuve, $mout]) }}" method="POST" style="display:inline;">
                             @csrf
@@ -59,29 +61,5 @@
             @endforeach
         </tbody>
     </table>
-
-
-    <!-- Formulaire pour ajouter un moût -->
-    <div class="container">
-        <h1>Modifier la Cuve : {{ $cuve->nom }}</h1>
-        <!-- Formulaire pour ajouter un moût -->
-        <h2 class="mt-5">Ajouter un Moût</h2>
-        <form id="addMoutForm" method="POST" action="{{ route('cuves.mouts.store', $cuve) }}">
-        @csrf
-        <div class="mb-3">
-            <label for="type" class="form-label">Type</label>
-            <input type="text" class="form-control" id="type" name="type" required>
-        </div>
-        <div class="mb-3">
-            <label for="origine" class="form-label">Origine</label>
-            <input type="text" class="form-control" id="origine" name="origine" required>
-        </div>
-        <div class="mb-3">
-            <label for="volume" class="form-label">Volume (L)</label>
-            <input type="number" step="0.01" class="form-control" id="volume" name="volume" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Ajouter le Moût</button>
-    </form>
-    </div>
 </div>
 @endsection

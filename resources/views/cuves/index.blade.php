@@ -32,17 +32,38 @@
                     <td>{{ $cuve->nom }}</td>
                     <td>{{ $cuve->volume_max }} L</td>
                     <td>{{ $cuve->volumeTotal() }} L</td>
-                    <td>
+                    <td class="d-flex gap-2">
                         <!-- Bouton Voir la Cuve -->
-                        @canany('view', $cuve)
-                            <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir la Cuve</a>
-                        @endcanany
+                        @can('view', $cuve)
+                            <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir</a>
+                        @endcan
 
-                        <!-- Bouton Modifier le Moût -->
                         @can('update', $cuve)
-                            @if($cuve->mouts->count() > 0)
-                                <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier les Moûts</a>
+                            <a href="{{ route('mouts.edit', $cuve->id) }}" class="btn btn-secondary">Gérer les Moûts</a>
+                        @endcan
+
+                        <!-- Bouton Modifier la Cuve -->
+                        @can('update', $cuve)
+                            <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        @endcan
+
+                        @can('update', $cuve)
+                            <!-- Bouton Restaurer -->
+                            @if($cuve->trashed())
+                                <form action="{{ route('cuves.restore', $cuve->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
+                                </form>
                             @endif
+                        @endcan
+
+                        <!-- Bouton Supprimer Définitivement -->
+                        @can('delete', $cuve)
+                            <form action="{{ route('cuves.forceDelete', $cuve->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
+                            </form>
                         @endcan
                     </td>
                 </tr>
@@ -53,6 +74,7 @@
             @endforelse
         </tbody>
     </table>
+
     <div class="d-flex justify-content-center mt-4">
         {{ $cuves->links('pagination::bootstrap-5') }}
     </div>
