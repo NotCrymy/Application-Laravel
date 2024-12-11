@@ -86,4 +86,33 @@ class CuveController extends Controller
         \App\Helpers\LogHelper::logAction("Cuve '{$cuve->nom}' permanently deleted.");
         return redirect()->route('cuves.index')->with('success', 'Cuve supprimée définitivement.');
     }
+
+    public function etat()
+    {
+        // Récupérer toutes les cuves avec leurs moûts
+        $cuves = Cuve::with('mouts')->get();
+
+        // Calculer le volume total par type de moût
+        $moutsByType = \App\Models\Mout::select('type', \Illuminate\Support\Facades\DB::raw('SUM(volume) as total_volume'))
+                                        ->groupBy('type')
+                                        ->get();
+
+        // Préparation des données pour le graphique des moûts par type
+        $types = $moutsByType->pluck('type');
+        $volumes = $moutsByType->pluck('total_volume');
+
+        // Calculer le taux de remplissage de chaque cuve
+        // Par exemple, volume utilisé / volume_max * 100
+        $cuvesData = $cuves->map(function($cuve) {
+            return [
+                'nom' => $cuve->nom,
+                'taux_remplissage' => $cuve->volume_max > 0 ? ($cuve->volumeTotal() / $cuve->volume_max) * 100 : 0
+            ];
+        });
+
+        $cuvesNames = $cuvesData->pluck('nom');
+        $cuvesFillRates = $cuvesData->pluck('taux_remplissage');
+
+        return view('cuves.etat', compact('types', 'volumes', 'cuvesNames', 'cuvesFillRates'));
+    }
 }

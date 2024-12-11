@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'BreakingWine')</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ asset('favicon.ico') }}">
+    <!-- Ajout du JS compilé -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @vite('resources/js/app.js')
     <!-- Ajout du CSS compilé avec SCSS -->
     @vite('resources/sass/app.scss')
-    <!-- Ajout du JS compilé -->
-    @vite('resources/js/app.js')
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">

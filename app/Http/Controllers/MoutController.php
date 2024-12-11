@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 
 class MoutController extends Controller
 {
-    public function edit(Cuve $cuve)
+    public function edit($id)
     {
+        $cuve = Cuve::findOrFail($id);
         $proprietaires = Proprietaire::all();
         return view('mouts.edit', compact('cuve', 'proprietaires'));
     }
@@ -25,14 +26,21 @@ class MoutController extends Controller
         ]);
 
         if ($cuve->volumeTotal() + $validated['volume'] > $cuve->volume_max) {
-            return back()->withErrors(['volume' => 'Le volume dépasse la capacité de la cuve.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Le volume dépasse la capacité de la cuve.'
+            ], 422);
         }
 
         $mout = $cuve->mouts()->create($validated);
 
         \App\Helpers\LogHelper::logAction("Ajout du moût '{$mout->type}' ({$mout->volume} L) à la cuve '{$cuve->nom}'.");
 
-        return back()->with('success', 'Moût ajouté avec succès.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Moût ajouté avec succès.',
+            'mout' => $mout
+        ]);
     }
 
     public function update(Request $request, Cuve $cuve, Mout $mout)

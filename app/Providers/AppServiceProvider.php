@@ -59,11 +59,15 @@ class AppServiceProvider extends ServiceProvider
             }
             $breadcrumbsConfig = [
                 'dashboard' => [
+                    ['name' => 'Dashboard', 'url' => null],
+                ],
+                'cuves.etat' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
+                    ['name' => 'Etat des cuves', 'url' => null],
                 ],
                 'cuves.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
-                    ['name' => 'Cuves', 'url' => route('cuves.index')],
+                    ['name' => 'Cuves', 'url' => null],
                 ],
                 'cuves.show' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
@@ -82,7 +86,7 @@ class AppServiceProvider extends ServiceProvider
                 ],
                 'users.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
-                    ['name' => 'Utilisateurs', 'url' => route('users.index')],
+                    ['name' => 'Utilisateurs', 'url' =>  null],
                 ],
                 'proprietaires.show' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
@@ -97,7 +101,11 @@ class AppServiceProvider extends ServiceProvider
                 ],
                 'logs.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
-                    ['name' => 'Logs', 'url' => route('logs.index')],
+                    ['name' => 'Logs', 'url' => null ],
+                ],
+                'proprietaires.index' => [
+                    ['name' => 'Dashboard', 'url' => route('dashboard')],
+                    ['name' => 'Propriétaires', 'url' => null],
                 ],
             ];
     

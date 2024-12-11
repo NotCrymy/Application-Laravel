@@ -26,18 +26,20 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // Route propriétaires
+    Route::get('/proprietaires', [ProprietaireController::class, 'index'])->name('proprietaires.index'); // Renvoie l'index
+    Route::post('/proprietaires', [ProprietaireController::class, 'store'])->name('proprietaires.store'); // Mettre à jour d'un proprio
+    Route::get('/proprietaires/{proprietaire}', [ProprietaireController::class, 'show'])->name('proprietaires.show'); // Voir les propriétaires
+
     // Routes pour les cuves
     Route::get('/cuves', [CuveController::class, 'index'])->name('cuves.index'); // Voir toutes les cuves
+    Route::get('/cuves/etat', [CuveController::class, 'etat'])->name('cuves.etat');  // Voir l'etat des cuves
     Route::get('/cuves/{cuve}', [CuveController::class, 'show'])->name('cuves.show'); // Détails d'une cuve (moûts inclus)
     Route::get('/cuves/{cuve}/edit', [CuveController::class, 'edit'])->name('cuves.edit'); // Modifier une cuve et gérer les moûts
     Route::put('/cuves/{cuve}', [CuveController::class, 'update'])->name('cuves.update'); // Mise à jour de la cuve
     Route::delete('/cuves/{cuve}', [CuveController::class, 'destroy'])->name('cuves.destroy'); // Supprimer une cuve
-
-    // Actions sur les moûts dans le contexte des cuves
     Route::get('/cuves/{cuve}/mouts/edit', [MoutController::class, 'edit'])->name('mouts.edit'); // Ajouter un moût
     Route::post('/cuves/{cuve}/mouts', [MoutController::class, 'store'])->name('cuves.mouts.store'); // Mis à jour d'un mout
-    Route::post('/proprietaires', [ProprietaireController::class, 'store'])->name('proprietaires.store'); // Mettre à jour d'un proprio
-    Route::get('/proprietaires/{proprietaire}', [ProprietaireController::class, 'show'])->name('proprietaires.show'); // Voir les propriétaires
     Route::put('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'update'])->name('cuves.mouts.update'); // Mettre à jour un moût
     Route::delete('/cuves/{cuve}/mouts/{mout}', [MoutController::class, 'destroy'])->name('cuves.mouts.destroy'); // Supprimer un moût
     Route::post('/cuves/{id}/restore', [CuveController::class, 'restore'])->name('cuves.restore'); // Permet de restaurer les cuves delete

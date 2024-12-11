@@ -23,10 +23,4 @@ class Cuve extends Model
     {
         return $this->mouts->sum('volume');
     }
-
-    // Vérifie si un volume supplémentaire peut être ajouté
-    public function peutAccepterVolume($volume)
-    {
-        return ($this->volumeTotal() + $volume) <= $this->volume_max;
-    }
 }
