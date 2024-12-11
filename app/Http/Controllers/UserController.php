@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = $users = User::withTrashed()->get();
         $roles = Role::all();
         $defaultRole = 'cuviste';
 

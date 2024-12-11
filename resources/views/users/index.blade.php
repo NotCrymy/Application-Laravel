@@ -68,7 +68,7 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->roles->pluck('name')->join(', ') }}</td>
-                    <td class="d-flex justify-content-end gap-2">
+                    <td class="d-flex gap-2">
                         @if(!$user->hasRole('super-admin'))
                             <!-- Bouton Modifier -->
                             <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">Modifier</a>
@@ -87,6 +87,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
                             </form>
+                        
                         @else
                             <span class="badge bg-secondary">Super Admin</span>
                         @endif

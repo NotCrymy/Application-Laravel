@@ -42,5 +42,19 @@
         <button type="submit" class="btn btn-success">Sauvegarder</button>
         <a href="{{ route('users.index') }}" class="btn btn-secondary">Annuler</a>
     </form>
+
+    <!-- Bouton pour soft delete ou restaurer l'utilisateur -->
+    @if(!$user->trashed())
+        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline-block mt-3">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Supprimer (Soft Delete)</button>
+        </form>
+    @else
+        <form action="{{ route('users.restore', $user->id) }}" method="POST" class="d-inline-block mt-3">
+            @csrf
+            <button type="submit" class="btn btn-success">Restaurer</button>
+        </form>
+    @endif
 </div>
 @endsection
