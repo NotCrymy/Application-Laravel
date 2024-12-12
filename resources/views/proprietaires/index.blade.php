@@ -18,7 +18,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>Email</th>
@@ -28,7 +27,6 @@
         <tbody>
             @forelse($proprietaires as $proprio)
                 <tr>
-                    <td>{{ $proprio->id }}</td>
                     <td>{{ $proprio->nom }}</td>
                     <td>{{ $proprio->prenom }}</td>
                     <td>{{ $proprio->email }}</td>
