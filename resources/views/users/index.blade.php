@@ -70,25 +70,31 @@
                     <td>{{ $user->roles->pluck('name')->join(', ') }}</td>
                     <td class="d-flex gap-2">
                         @if(!$user->hasRole('super-admin'))
-                            <!-- Bouton Modifier -->
-                            <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">Modifier</a>
-
-                            <!-- Bouton Supprimer Définitivement -->
-                            <form action="{{ route('users.forceDelete', $user->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
-                            </form>
-                        
-                            <!-- Bouton Restaurer -->
                             @if($user->trashed())
-                                <form action="{{ route('users.restore', $user->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
-                                </form>
+                                <!-- Bouton Restaurer -->
+                                @can('update', $user)
+                                    <form action="{{ route('users.restore', $user->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
+                                    </form>
+                                @endcan
+
+                                <!-- Bouton Supprimer Définitivement -->
+                                @can('delete', $user)
+                                    <form action="{{ route('users.forceDelete', $user->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
+                                    </form>
+                                @endcan
+                            @else
+                                <!-- Bouton Modifier -->
+                                @can('update', $user)
+                                    <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                @endcan
                             @endif
                         @else
-                            <span class="badge bg-secondary">Super Admin</span>
+                            <span>N/A</span>
                         @endif
                     </td>
                 </tr>

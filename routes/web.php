@@ -19,8 +19,7 @@ Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Routes protégées par l'authentification
-Route::middleware('auth')->group(function () {
-
+Route::middleware('auth')->group(function () { 
     // Route unique pour le Dashboard
     Route::get('/dashboard', function () {
         return view('dashboard');

@@ -33,38 +33,39 @@
                     <td>{{ $cuve->volume_max }} L</td>
                     <td>{{ $cuve->volumeTotal() }} L</td>
                     <td class="d-flex gap-2">
-                        <!-- Bouton Voir la Cuve -->
-                        @can('view', $cuve)
-                            <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir</a>
-                        @endcan
-
-                        @can('update', $cuve)
-                            <a href="{{ route('mouts.edit', $cuve->id) }}" class="btn btn-secondary">Gérer les Moûts</a>
-                        @endcan
-
-                        <!-- Bouton Modifier la Cuve -->
-                        @can('update', $cuve)
-                            <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier la Cuve</a>
-                        @endcan
-
-                        <!-- Bouton Supprimer Définitivement -->
-                        @can('delete', $cuve)
-                            <form action="{{ route('cuves.forceDelete', $cuve->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
-                            </form>
-                        @endcan
-
-                        @can('update', $cuve)
-                            <!-- Bouton Restaurer -->
-                            @if($cuve->trashed())
+                        <!-- Vérification si la cuve est soft deleted -->
+                        @if($cuve->trashed())
+                            @can('update', $cuve)
+                                <!-- Bouton Restaurer -->
                                 <form action="{{ route('cuves.restore', $cuve->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
                                 </form>
-                            @endif
-                        @endcan
+                            @endcan
+
+                            @can('delete', $cuve)
+                                <!-- Bouton Supprimer Définitivement -->
+                                <form action="{{ route('cuves.forceDelete', $cuve->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer Définitivement</button>
+                                </form>
+                            @endcan
+                        @else
+                            <!-- Actions si la cuve n'est pas supprimée -->
+                            @can('view', $cuve)
+                                <!-- Bouton Voir la Cuve -->
+                                <a href="{{ route('cuves.show', $cuve) }}" class="btn btn-info btn-sm">Voir</a>
+                            @endcan
+
+                            @can('update', $cuve)
+                                <!-- Bouton Gérer les Moûts -->
+                                <a href="{{ route('mouts.edit', $cuve->id) }}" class="btn btn-secondary">Gérer les Moûts</a>
+
+                                <!-- Bouton Modifier la Cuve -->
+                                <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            @endcan
+                        @endif
                     </td>
                 </tr>
             @empty
