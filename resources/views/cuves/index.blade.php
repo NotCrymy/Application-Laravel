@@ -44,7 +44,7 @@
 
                         <!-- Bouton Modifier la Cuve -->
                         @can('update', $cuve)
-                            <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier la Cuve</a>
                         @endcan
 
                         <!-- Bouton Supprimer Définitivement -->

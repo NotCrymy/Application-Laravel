@@ -102,7 +102,6 @@ class CuveController extends Controller
         $volumes = $moutsByType->pluck('total_volume');
 
         // Calculer le taux de remplissage de chaque cuve
-        // Par exemple, volume utilisé / volume_max * 100
         $cuvesData = $cuves->map(function($cuve) {
             return [
                 'nom' => $cuve->nom,
