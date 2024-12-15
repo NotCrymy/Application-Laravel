@@ -49,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('cuviste');
         });
 
+        // Pour le fil d'arianne
         View::composer('*', function ($view) {
             $route = request()->route();
             $proprietaire = $route->parameter('proprietaire');

@@ -14,7 +14,7 @@ class CuvePolicy
 
     public function update(User $user, Cuve $cuve)
     {
-        return $user->hasRole('admin') || $user->hasRole('cuviste') || $user->hasRole('admin') ;
+        return $user->hasRole('cuviste') || $user->hasRole('admin') ;
     }
 
     public function delete(User $user, Cuve $cuve)
