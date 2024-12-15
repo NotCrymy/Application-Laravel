@@ -7,7 +7,8 @@
     <title>@yield('title', 'BreakingWine')</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ asset('favicon.ico') }}">
-    <!-- Ajout du JS compilé -->
+    <!-- Ajout du JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite('resources/js/app.js')
     <!-- Ajout du CSS compilé avec SCSS -->

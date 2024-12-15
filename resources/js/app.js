@@ -1,7 +1,11 @@
-// Importer Bootstrap JS
-import 'bootstrap';
+import $ from 'jquery';
+window.$ = $;
+window.jQuery = $;
 
-// Animation pour les cartes
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
+
+// Exemple d'animation pour les cartes
 document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card');
     cards.forEach((card, index) => {
@@ -9,90 +13,87 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('visible');
         }, 200 * index);
     });
+
+    // Formulaire Ajouter Moût
+    setupAddMoutForm();
+
+    // Formulaire Ajouter Propriétaire
+    setupAddProprietaireForm();
 });
 
-// Formulaire AJAX Mout
-document.addEventListener("DOMContentLoaded", function () {
-    const addMoutForm = document.getElementById("addMoutForm");
+// Formulaire AJAX - Ajouter un Moût
+function setupAddMoutForm() {
+    const addMoutForm = document.getElementById('addMoutForm');
+    if (!addMoutForm) return;
 
-    if (addMoutForm) {
-        const moutUrl = addMoutForm.getAttribute('data-url');
+    const url = addMoutForm.getAttribute('data-url');
+    addMoutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-        addMoutForm.addEventListener("submit", function (e) {
-            e.preventDefault();
+        const formData = new FormData(addMoutForm);
 
-            const formData = new FormData(addMoutForm);
+        sendAjaxForm(url, formData, 'Moût ajouté avec succès !');
+    });
+}
 
-            fetch(moutUrl, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                    "Accept": "application/json",
-                },
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    alert(data.message);
-                    location.reload(); // Pour mettre à jour la liste des moûts
-                } else {
-                    alert(data.message || "Erreur lors de l'ajout du moût.");
-                }
-            })
-            .catch((error) => console.error("Erreur AJAX :", error));
-        });
-    }
-});
+// Formulaire AJAX - Ajouter un Propriétaire
+function setupAddProprietaireForm() {
+    const addProprietaireForm = document.getElementById('addProprietaireForm');
+    if (!addProprietaireForm) return;
 
-// Formulaire AJAX Propriétaire
-document.addEventListener("DOMContentLoaded", function () {
-    const addProprietaireForm = document.getElementById("addProprietaireForm");
-    if (addProprietaireForm) {
-        const proprietaireUrl = addProprietaireForm.getAttribute('data-url');
+    const url = addProprietaireForm.getAttribute('data-url');
+    addProprietaireForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-        addProprietaireForm.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const formData = new FormData(addProprietaireForm);
+        const formData = new FormData(addProprietaireForm);
 
-            fetch(proprietaireUrl, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                    "Accept": "application/json",
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Propriétaire ajouté avec succès !");
-                    location.reload(); 
-                } else {
-                    alert(data.message || "Erreur lors de l'ajout du propriétaire.");
-                }
-            })
-            .catch((error) => console.error("Erreur AJAX :", error));
-        });
-    }
-});
+        sendAjaxForm(url, formData, 'Propriétaire ajouté avec succès !');
+    });
+}
 
+// Fonction générique pour envoyer des formulaires AJAX
+function sendAjaxForm(url, formData, successMessage) {
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+        },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.success) {
+            toastr.success(successMessage, 'Succès');
 
-// Chart etat des cuves
+            // Délai avant le rechargement de la page
+            setTimeout(() => {
+                location.reload();
+            }, 3000); // 3 secondes
+        } else {
+            toastr.error(data.message || 'Une erreur est survenue.', 'Erreur');
+        }
+    })
+    .catch((error) => {
+        console.error('Erreur AJAX :', error);
+        toastr.error('Erreur inattendue.', 'Erreur');
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const dataContainer = document.getElementById('data-container');
     if (!dataContainer) {
         console.log("Pas de data-container trouvé, on arrête.");
-        return; // On n'est pas sur la page etat des cuves
+        return; // On n'est pas sur la page contenant les graphiques
     }
 
-    // Récupérer les données
+    // Récupérer les données nécessaires pour les graphiques
     const types = JSON.parse(document.getElementById('types-data').textContent);
     const volumes = JSON.parse(document.getElementById('volumes-data').textContent);
     const cuvesNames = JSON.parse(document.getElementById('cuves-names-data').textContent);
     const cuvesFillRates = JSON.parse(document.getElementById('cuves-fill-data').textContent);
 
-    // Initialiser Chart.js sur moutsChart
+    // Initialisation du premier graphique (volume total des types de moûts)
     const ctxMouts = document.getElementById('moutsChart').getContext('2d');
     new Chart(ctxMouts, {
         type: 'bar',
@@ -116,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Initialiser Chart.js sur cuvesChart
+    // Initialisation du second graphique (taux de remplissage des cuves)
     const ctxCuves = document.getElementById('cuvesChart').getContext('2d');
     new Chart(ctxCuves, {
         type: 'bar',
