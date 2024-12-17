@@ -9,21 +9,18 @@ class Mout extends Model
 {
     use HasFactory;
 
+    // Champs modifiables
     protected $fillable = ['volume', 'type', 'origine', 'cuve_id', 'proprietaire_id'];
 
+    // Relation : Un moût appartient à une cuve
     public function cuve()
     {
         return $this->belongsTo(Cuve::class);
     }
 
+    // Relation : Un moût appartient à un propriétaire
     public function proprietaire()
     {
         return $this->belongsTo(Proprietaire::class);
-    }
-
-    public function edit(Cuve $cuve)
-    {
-        $proprietaires = \App\Models\Proprietaire::all();
-        return view('mouts.edit', compact('cuve', 'proprietaires'));
     }
 }

@@ -9,8 +9,10 @@ class Proprietaire extends Model
 {
     use HasFactory;
 
+    // Champs modifiables
     protected $fillable = ['nom', 'prenom', 'numtel', 'email'];
 
+    // Relation : Un propriétaire peut avoir plusieurs moûts
     public function mouts()
     {
         return $this->hasMany(Mout::class);

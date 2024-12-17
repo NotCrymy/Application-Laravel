@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 
 class ProprietaireController extends Controller
 {
+    // Affiche la liste paginée des propriétaires avec recherche
     public function index(Request $request)
     {
         $search = $request->input('search');
 
+        // Requête pour filtrer les propriétaires
         $query = Proprietaire::query();
 
         if ($search) {
@@ -24,6 +26,7 @@ class ProprietaireController extends Controller
         return view('proprietaires.index', compact('proprietaires', 'search'));
     }
 
+    // Crée un nouveau propriétaire
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,7 +45,7 @@ class ProprietaireController extends Controller
         ]);
     }
 
-
+    // Affiche les détails d'un propriétaire
     public function show(Proprietaire $proprietaire)
     {
         return view('proprietaires.show', compact('proprietaire'));

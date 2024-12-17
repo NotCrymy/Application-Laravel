@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class MoutController extends Controller
 {
+    // Affiche le formulaire d'édition d'un moût pour une cuve
     public function edit($id)
     {
         $cuve = Cuve::findOrFail($id);
@@ -16,6 +17,7 @@ class MoutController extends Controller
         return view('mouts.edit', compact('cuve', 'proprietaires'));
     }
 
+    // Ajoute un moût à une cuve spécifique
     public function store(Request $request, Cuve $cuve)
     {
         $validated = $request->validate([
@@ -25,6 +27,7 @@ class MoutController extends Controller
             'proprietaire_id' => 'required|exists:proprietaires,id',
         ]);
 
+        // Vérifie si le volume ne dépasse pas la capacité maximale de la cuve
         if ($cuve->volumeTotal() + $validated['volume'] > $cuve->volume_max) {
             return response()->json([
                 'success' => false,
@@ -43,6 +46,7 @@ class MoutController extends Controller
         ]);
     }
 
+    // Met à jour un moût existant dans une cuve
     public function update(Request $request, Cuve $cuve, Mout $mout)
     {
         $validated = $request->validate([
@@ -52,6 +56,7 @@ class MoutController extends Controller
             'proprietaire_id' => 'required|exists:proprietaires,id',
         ]);
 
+        // Vérifie si la mise à jour du volume est possible
         if (($cuve->volumeTotal() - $mout->volume + $validated['volume']) > $cuve->volume_max) {
             return back()->withErrors(['volume' => 'Le volume dépasse la capacité de la cuve.']);
         }
@@ -63,6 +68,7 @@ class MoutController extends Controller
         return back()->with('success', 'Moût mis à jour avec succès.');
     }
 
+    // Supprime un moût de la cuve
     public function destroy(Cuve $cuve, Mout $mout)
     {
         $moutType = $mout->type;

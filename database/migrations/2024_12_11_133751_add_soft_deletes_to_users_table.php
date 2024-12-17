@@ -7,24 +7,25 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Exécute la migration pour ajouter la colonne 'deleted_at' dans la table 'users'.
      */
     public function up()
     {
+        // Vérifie si la colonne 'deleted_at' n'existe pas déjà
         if (!Schema::hasColumn('users', 'deleted_at')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->softDeletes(); // Ajoute la colonne deleted_at
+                $table->softDeletes(); // Ajoute la colonne 'deleted_at' pour le soft delete
             });
         }
     }
 
     /**
-     * Reverse the migrations.
+     * Annule la migration en supprimant la colonne 'deleted_at'.
      */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropSoftDeletes(); // Supprime la colonne deleted_at
+            $table->dropSoftDeletes(); // Supprime la colonne 'deleted_at' si elle existe
         });
     }
 };

@@ -22,42 +22,45 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Grant all permissions to super admin
+        // Accorde toutes les permissions au super-admin
         Gate::before(function ($user, $ability) {
             if ($user->hasRole('super-admin')) {
                 return true;
             }
         });
 
-        // Gate pour les administrateurs
+        // Gates pour les rôles spécifiques
         Gate::define('admin-access', function ($user) {
             return $user->hasRole('admin');
         });
 
-        // Gate spécifique pour gérer les administrateurs
         Gate::define('manage-admins', function ($user) {
             return $user->hasRole('super-admin');
         });
 
-        // Gate pour les managers
         Gate::define('manager-access', function ($user) {
             return $user->hasRole('manager');
         });
 
-        // Gate pour les cuviste
         Gate::define('cuviste-access', function ($user) {
             return $user->hasRole('cuviste');
         });
 
-        // Pour le fil d'arianne
+        // Configuration pour le fil d'Ariane (breadcrumbs)
+        // Le View::composer('*', ...) s'applique à toutes les vues de l'application.
+        // Il permet de partager des données globales (comme ici les breadcrumbs) avec chaque vue avant son rendu.
+        // Cela évite de passer ces données manuellement à chaque appel de `view()`.
         View::composer('*', function ($view) {
             $route = request()->route();
             $proprietaire = $route->parameter('proprietaire');
 
+            // Récupération de l'ID de la cuve à partir du propriétaire
             $cuveId = null;
             if ($proprietaire && $proprietaire->mouts->isNotEmpty()) {
                 $cuveId = $proprietaire->mouts->first()->cuve->id;
             }
+
+            // Configuration des chemins du fil d'Ariane
             $breadcrumbsConfig = [
                 'dashboard' => [
                     ['name' => 'Dashboard', 'url' => null],
@@ -87,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
                 ],
                 'users.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
-                    ['name' => 'Utilisateurs', 'url' =>  null],
+                    ['name' => 'Utilisateurs', 'url' => null],
                 ],
                 'proprietaires.show' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
@@ -102,20 +105,22 @@ class AppServiceProvider extends ServiceProvider
                 ],
                 'logs.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
-                    ['name' => 'Logs', 'url' => null ],
+                    ['name' => 'Logs', 'url' => null],
                 ],
                 'proprietaires.index' => [
                     ['name' => 'Dashboard', 'url' => route('dashboard')],
                     ['name' => 'Propriétaires', 'url' => null],
                 ],
             ];
-    
+
+            // Détermine le chemin actuel pour le fil d'Ariane
             $routeName = Route::currentRouteName();
             $breadcrumbs = $breadcrumbsConfig[$routeName] ?? [];
             $view->with('breadcrumbs', $breadcrumbs);
         });
     }
 
+    // Déclaration des politiques
     protected $policies = [
         \App\Models\Cuve::class => \App\Policies\CuvePolicy::class,
     ];
