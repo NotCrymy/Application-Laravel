@@ -69,7 +69,7 @@ function sendAjaxForm(url, formData, successMessage) {
             // Délai avant le rechargement de la page
             setTimeout(() => {
                 location.reload();
-            }, 3000); // 3 secondes
+            }, 1000); // 10 secondes
         } else {
             toastr.error(data.message || 'Une erreur est survenue.', 'Erreur');
         }

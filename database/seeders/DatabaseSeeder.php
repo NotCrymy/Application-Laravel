@@ -47,9 +47,6 @@ class DatabaseSeeder extends Seeder
         ]);
         $manager->assignRole($managerRole);
 
-        // Crée 16 autres utilisateurs aléatoires
-        User::factory(16)->create();
-
         // Crée une liste de propriétaires
         $proprietaires = Proprietaire::factory(10)->create();
 

@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <a href="{{ route('proprietaires.index') }}" class="btn btn-warning w-100 py-3 centered-button">
-                                Voir les Propriétaires
+                                Annuaire
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -57,7 +57,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <a href="{{ route('proprietaires.index') }}" class="btn btn-warning w-100 py-3 centered-button">
-                                Voir les Propriétaires
+                                Annuaire
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <a href="{{ route('proprietaires.index') }}" class="btn btn-success w-100 py-3">
-                                Voir les Propriétaires
+                                Annuaire
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">

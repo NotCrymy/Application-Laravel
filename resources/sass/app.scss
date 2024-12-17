@@ -26,3 +26,46 @@ body {
 .card-header {
     text-align: center;
 }
+
+/* Styles pour les popups Toastr */
+.toast {
+    border-radius: 8px; /* Coins arrondis */
+    font-family: 'Nunito', sans-serif; /* Police personnalisée */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    padding: 15px; /* Espace intérieur */
+    font-size: 14px;
+}
+
+/* Success */
+.toast-success {
+    background-color: #28a745 !important; /* Vert personnalisé */
+    color: #fff !important;
+    border-left: 5px solid #218838; /* Bord gauche */
+}
+
+/* Error */
+.toast-error {
+    background-color: #dc3545 !important; /* Rouge personnalisé */
+    color: #fff !important;
+    border-left: 5px solid #c82333;
+}
+
+/* Info */
+.toast-info {
+    background-color: #17a2b8 !important; /* Bleu clair */
+    color: #fff !important;
+    border-left: 5px solid #117a8b;
+}
+
+/* Warning */
+.toast-warning {
+    background-color: #ffc107 !important; /* Jaune */
+    color: #212529 !important; /* Texte sombre */
+    border-left: 5px solid #e0a800;
+}
+
+/* Barre de progression */
+.toast-progress {
+    background-color: rgba(255, 255, 255, 0.5) !important; /* Barre semi-transparente */
+    height: 5px;
+}
