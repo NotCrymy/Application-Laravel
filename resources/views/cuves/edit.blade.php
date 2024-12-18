@@ -22,7 +22,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Enregistrer les Modifications</button>
-        <a href="{{ route('cuves.index') }}" class="btn btn-secondary">Annuler</a>
+        <a href="{{ route('cuves.index') }}" class="btn btn-secondary">Revenir</a>
     </form>
 
     <!-- Formulaire pour la suppression -->
