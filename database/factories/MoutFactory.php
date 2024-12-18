@@ -30,7 +30,7 @@ class MoutFactory extends Factory
         return [
             'type' => $this->faker->randomElement($typesDeMouts),
             'origine' => $this->faker->randomElement($originesFrancaises),
-            'volume' => $this->faker->numberBetween(50, 150), // Volume en litres
+            'volume' => $this->faker->numberBetween(50, 150),
             'cuve_id' => Cuve::factory(),
             'proprietaire_id' => Proprietaire::factory(),
         ];

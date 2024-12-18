@@ -21,7 +21,7 @@ class CuveFactory extends Factory
             'Volcan', 'Glacier', 'Mistral', 'Cyclone', 'Horizon', 'Crépuscule', 'Polaris', 
             'Orchidée', 'Lavande', 'Corail', 'Granit', 'Marbre', 'Quartz', 'Sable', 'Tourmaline'
         ]) . ' ' . $this->faker->numberBetween(1, 100),
-            'volume_max' => $this->faker->numberBetween(30, 50) * 100, // Volume aléatoire en litres
+            'volume_max' => $this->faker->numberBetween(30, 50) * 100,
         ];
     }
 }

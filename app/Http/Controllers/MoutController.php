@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cuve;
 use App\Models\Mout;
 use App\Models\Proprietaire;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreMoutRequest;
+use App\Http\Requests\UpdateMoutRequest;
 
 class MoutController extends Controller
 {
@@ -18,14 +19,9 @@ class MoutController extends Controller
     }
 
     // Ajoute un moût à une cuve spécifique
-    public function store(Request $request, Cuve $cuve)
+    public function store(StoreMoutRequest $request, Cuve $cuve)
     {
-        $validated = $request->validate([
-            'type' => 'required|string|max:255',
-            'origine' => 'required|string|max:255',
-            'volume' => 'required|numeric|min:0',
-            'proprietaire_id' => 'required|exists:proprietaires,id',
-        ]);
+        $validated = $request->validated();
 
         // Vérifie si le volume ne dépasse pas la capacité maximale de la cuve
         if ($cuve->volumeTotal() + $validated['volume'] > $cuve->volume_max) {
@@ -47,14 +43,9 @@ class MoutController extends Controller
     }
 
     // Met à jour un moût existant dans une cuve
-    public function update(Request $request, Cuve $cuve, Mout $mout)
+    public function update(UpdateMoutRequest $request, Cuve $cuve, Mout $mout)
     {
-        $validated = $request->validate([
-            'type' => 'required|string|max:255',
-            'origine' => 'required|string|max:255',
-            'volume' => 'required|numeric|min:0',
-            'proprietaire_id' => 'required|exists:proprietaires,id',
-        ]);
+        $validated = $request->validated();
 
         // Vérifie si la mise à jour du volume est possible
         if (($cuve->volumeTotal() - $mout->volume + $validated['volume']) > $cuve->volume_max) {
