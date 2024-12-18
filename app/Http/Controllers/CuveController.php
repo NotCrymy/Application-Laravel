@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cuve;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateCuveRequest;
-use App\Http\Requests\StoreMoutRequest;
-use App\Http\Requests\UpdateMoutRequest;
+use App\Models\Mout;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CuveController extends Controller
@@ -44,8 +43,9 @@ class CuveController extends Controller
     // Retourne le formulaire d'édition d'une cuve
     public function edit(Cuve $cuve)
     {
+        $proprietaires = Mout::all();
         \App\Helpers\LogHelper::logAction("Accès à l'édition de la cuve '{$cuve->nom}'.");
-        return view('cuves.edit', compact('cuve'));
+        return view('cuves.edit', compact('cuve', 'proprietaires'));
     }
 
     // Met à jour les informations d'une cuve

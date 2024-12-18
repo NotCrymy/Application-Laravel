@@ -47,14 +47,15 @@ class MoutController extends Controller
     {
         $validated = $request->validated();
 
-        // Vérifie si la mise à jour du volume est possible
+        // Vérifier si le volume dépasse la capacité maximale de la cuve
         if (($cuve->volumeTotal() - $mout->volume + $validated['volume']) > $cuve->volume_max) {
-            return back()->withErrors(['volume' => 'Le volume dépasse la capacité de la cuve.']);
+            return back()->withErrors(['volume' => 'Le volume dépasse la capacité de la cuve.'])->withInput();
         }
 
+        // Mettre à jour le moût
         $mout->update($validated);
 
-        \App\Helpers\LogHelper::logAction("Modification du moût '{$mout->type}' dans la cuve '{$cuve->nom}': Nouveau volume = {$mout->volume} L, Nouvelle origine = {$mout->origine}.");
+        \App\Helpers\LogHelper::logAction("Modification du moût '{$mout->type}' dans la cuve '{$cuve->nom}': Nouveau volume = {$mout->volume} L.");
 
         return back()->with('success', 'Moût mis à jour avec succès.');
     }

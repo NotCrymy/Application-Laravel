@@ -46,16 +46,30 @@
         <tbody>
             @foreach($cuve->mouts as $mout)
                 <tr>
+                    <!-- Affichage des informations du moût -->
                     <td>{{ $mout->type }}</td>
                     <td>{{ $mout->origine }}</td>
-                    <td>{{ $mout->volume }} L</td>
-                    <td>{{ $mout->proprietaire ? $mout->proprietaire->nom.' '.$mout->proprietaire->prenom : 'N/A' }}</td>
                     <td>
-                        <form action="{{ route('cuves.mouts.destroy', [$cuve, $mout]) }}" method="POST" style="display:inline;">
+                        <!-- Formulaire de modification du volume uniquement -->
+                        <form action="{{ route('cuves.mouts.update', [$cuve, $mout]) }}" method="POST" class="d-inline">
                             @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            @method('PUT')
+
+                            <!-- Champ pour modifier le volume -->
+                            <input type="number" name="volume" value="{{ $mout->volume }}" class="form-control form-control-sm d-inline" style="width: 80px;" min="0" step="0.1" required>
+
+                            <!-- Champs cachés pour les autres données -->
+                            <input type="hidden" name="type" value="{{ $mout->type }}">
+                            <input type="hidden" name="origine" value="{{ $mout->origine }}">
+                            <input type="hidden" name="proprietaire_id" value="{{ $mout->proprietaire_id }}">
+
+                            <!-- Bouton pour soumettre le formulaire -->
+                            <button type="submit" class="btn btn-primary btn-sm">Modifier</button>
                         </form>
+                    </td>
+                    <td>
+                        <!-- Affichage du propriétaire -->
+                        {{ $mout->proprietaire ? $mout->proprietaire->nom . ' ' . $mout->proprietaire->prenom : 'N/A' }}
                     </td>
                 </tr>
             @endforeach

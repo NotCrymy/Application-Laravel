@@ -60,7 +60,7 @@
 
                             @can('update', $cuve)
                                 <!-- Bouton Gérer les Moûts -->
-                                <a href="{{ route('mouts.edit', $cuve->id) }}" class="btn btn-secondary">Gérer les Moûts</a>
+                                <a href="{{ route('mouts.edit', $cuve->id) }}" class="btn btn-secondary">Gérer la Cuve</a>
 
                                 <!-- Bouton Modifier la Cuve -->
                                 <a href="{{ route('cuves.edit', $cuve) }}" class="btn btn-warning btn-sm">Modifier</a>
