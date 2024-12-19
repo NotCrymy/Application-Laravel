@@ -93,6 +93,8 @@ class CuveController extends Controller
     // Affiche l'état des cuves et les statistiques des moûts
     public function etat()
     {
+        \App\Helpers\LogHelper::logAction("Visualisation de l'etat des cuves (graphique).");
+
         // Récupère toutes les cuves avec leurs moûts
         $cuves = Cuve::with('mouts')->get();
 
