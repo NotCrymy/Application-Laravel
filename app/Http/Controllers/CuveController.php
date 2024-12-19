@@ -99,7 +99,7 @@ class CuveController extends Controller
         $cuves = Cuve::with('mouts')->get();
 
         // Calcule le volume total par type de moût
-        $moutsByType = \App\Models\Mout::select('type', \Illuminate\Support\Facades\DB::raw('SUM(volume) as total_volume'))
+        $moutsByType = Mout::select('type', \Illuminate\Support\Facades\DB::raw('SUM(volume) as total_volume'))
                                         ->groupBy('type')
                                         ->get();
 
