@@ -14,8 +14,7 @@ class CreateLogsTable extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id(); // Identifiant unique (clé primaire)
             $table->foreignId('user_id') // Clé étrangère vers la table 'users'
-                  ->constrained() // Ajoute automatiquement la contrainte de clé étrangère
-                  ->onDelete('cascade'); // Supprime les logs si l'utilisateur est supprimé
+                  ->constrained(); // Ajoute automatiquement la contrainte de clé étrangère
             $table->text('action'); // Description de l'action effectuée par l'utilisateur
             $table->timestamps(); // Colonnes 'created_at' et 'updated_at'
         });
