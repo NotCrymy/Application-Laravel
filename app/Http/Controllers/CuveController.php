@@ -17,6 +17,8 @@ class CuveController extends Controller
     {
         $search = $request->input('search');
 
+        \App\Helpers\LogHelper::logAction("Visualisation des cuves .");
+
         // Requête pour inclure les soft deletes
         $query = Cuve::withTrashed();
 
