@@ -25,8 +25,7 @@ return new class extends Migration {
         Schema::table('mouts', function (Blueprint $table) {
             $table->foreignId('proprietaire_id') // Clé étrangère vers 'proprietaires'
                   ->nullable() // Peut être nul
-                  ->constrained('proprietaires') // Contrainte de clé étrangère
-                  ->onDelete('cascade'); // Suppression en cascade
+                  ->constrained('proprietaires'); // Contrainte de clé étrangère
         });
     }
 

@@ -17,6 +17,8 @@ class CuveController extends Controller
     {
         $search = $request->input('search');
 
+        \App\Helpers\LogHelper::logAction("Visualisation des cuves .");
+
         // Requête pour inclure les soft deletes
         $query = Cuve::withTrashed();
 
@@ -91,11 +93,13 @@ class CuveController extends Controller
     // Affiche l'état des cuves et les statistiques des moûts
     public function etat()
     {
+        \App\Helpers\LogHelper::logAction("Visualisation de l'etat des cuves (graphique).");
+
         // Récupère toutes les cuves avec leurs moûts
         $cuves = Cuve::with('mouts')->get();
 
         // Calcule le volume total par type de moût
-        $moutsByType = \App\Models\Mout::select('type', \Illuminate\Support\Facades\DB::raw('SUM(volume) as total_volume'))
+        $moutsByType = Mout::select('type', \Illuminate\Support\Facades\DB::raw('SUM(volume) as total_volume'))
                                         ->groupBy('type')
                                         ->get();
 

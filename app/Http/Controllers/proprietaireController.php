@@ -12,6 +12,8 @@ class ProprietaireController extends Controller
     {
         $search = $request->input('search');
 
+        \App\Helpers\LogHelper::logAction("Visualisation de l'annuaire .");
+
         // Requête pour filtrer les propriétaires
         $query = Proprietaire::query();
 

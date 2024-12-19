@@ -17,8 +17,7 @@ class CreateMoutsTable extends Migration
             $table->string('origine'); // Origine du moût
             $table->float('volume', 8); // Volume du moût (8 chiffres avant la virgule)
             $table->foreignId('cuve_id') // Clé étrangère vers la table 'cuves'
-                  ->constrained() // Ajoute la contrainte de clé étrangère
-                  ->onDelete('cascade'); // Suppression en cascade si la cuve est supprimée
+                  ->constrained(); // Ajoute la contrainte de clé étrangère
             $table->timestamps(); // Colonnes 'created_at' et 'updated_at'
         });
     }
