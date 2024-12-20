@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuve;
-use Illuminate\Http\Request;
 use App\Http\Requests\UpdateCuveRequest;
 use App\Models\Mout;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Http\Requests\CuveIndexRequest;
 
 class CuveController extends Controller
 {
     use AuthorizesRequests;
 
     // Affiche la liste des cuves avec option de recherche
-    public function index(Request $request)
+    public function index(CuveIndexRequest $request)
     {
         $search = $request->input('search');
 

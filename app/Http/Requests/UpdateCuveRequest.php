@@ -11,7 +11,6 @@ class UpdateCuveRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Autorise l'accès. Ajustez selon les besoins (e.g., vérifier des permissions spécifiques).
         return true;
     }
 

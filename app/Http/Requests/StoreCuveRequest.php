@@ -11,7 +11,7 @@ class StoreCuveRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Vous pouvez ajouter une logique d'autorisation si nécessaire
+        return true;
     }
 
     /**

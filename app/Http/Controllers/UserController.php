@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -21,16 +23,10 @@ class UserController extends Controller
     }
 
     // Crée un nouvel utilisateur avec un rôle spécifié
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|max:30',
-            'role' => 'required|exists:roles,name',
-        ]);
+        $validated = $request->validated();
 
-        // Vérifie les permissions pour créer un administrateur
         if ($validated['role'] === 'admin' && !auth()->user()->can('manage-admins')) {
             return redirect()->route('users.index')->withErrors('Vous n\'êtes pas autorisé à ajouter un administrateur.');
         }
@@ -61,17 +57,9 @@ class UserController extends Controller
     }
 
     // Met à jour les informations d'un utilisateur existant
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8',
-            'role' => 'required|exists:roles,name',
-        ]);
-
-        $oldName = $user->name;
-        $oldEmail = $user->email;
+        $validated = $request->validated();
 
         $user->update([
             'name' => $validated['name'],
@@ -81,7 +69,7 @@ class UserController extends Controller
 
         $user->syncRoles([$validated['role']]);
 
-        \App\Helpers\LogHelper::logAction("Mise à jour de l'utilisateur '{$oldName}' : Nouveau nom = '{$user->name}', Nouveau rôle = '{$validated['role']}', Ancien email = '{$oldEmail}', Nouvel email = '{$user->email}'.");
+        \App\Helpers\LogHelper::logAction("Mise à jour de l'utilisateur '{$user->name}' : Nouveau rôle = '{$validated['role']}'.");
 
         return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
     }
@@ -127,28 +115,5 @@ class UserController extends Controller
         \App\Helpers\LogHelper::logAction("Utilisateur '{$user->name}' permanently deleted.");
 
         return redirect()->route('users.index')->with('success', 'Utilisateur supprimé définitivement.');
-    }
-
-    // Met à jour le rôle d'un utilisateur
-    public function updateRole(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        // Empêche la modification du rôle "super-admin"
-        if ($user->hasRole('super-admin')) {
-            return redirect()->route('users.index')->withErrors('Le rôle du super administrateur ne peut pas être modifié.');
-        }
-
-        $validated = $request->validate([
-            'role' => 'required|exists:roles,name',
-        ]);
-
-        $oldRoles = $user->getRoleNames()->join(', ');
-
-        $user->syncRoles([$validated['role']]);
-
-        \App\Helpers\LogHelper::logAction("Mise à jour des rôles de l'utilisateur '{$user->name}' : Ancien(s) rôle(s) = '{$oldRoles}', Nouveau rôle = '{$validated['role']}'.");
-
-        return redirect()->route('users.index')->with('success', 'Le rôle de l\'utilisateur a été mis à jour avec succès.');
     }
 }

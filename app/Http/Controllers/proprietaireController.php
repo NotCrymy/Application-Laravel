@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proprietaire;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProprietaireRequest;
+use App\Http\Requests\ProprietaireIndexRequest;
 
 class ProprietaireController extends Controller
 {
     // Affiche la liste paginée des propriétaires avec recherche
-    public function index(Request $request)
+    public function index(ProprietaireIndexRequest $request)
     {
         $search = $request->input('search');
 
@@ -29,14 +30,9 @@ class ProprietaireController extends Controller
     }
 
     // Crée un nouveau propriétaire
-    public function store(Request $request)
+    public function store(StoreProprietaireRequest $request)
     {
-        $validated = $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
-            'email' => 'required|email|unique:proprietaires,email',
-            'numtel' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $proprio = Proprietaire::create($validated);
 
