@@ -40,7 +40,6 @@
                 <th>Origine</th>
                 <th>Volume</th>
                 <th>Propriétaire</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
